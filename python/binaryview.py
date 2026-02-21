@@ -2462,11 +2462,8 @@ class FunctionList:
 				raise IndexError(f"Index {i} out of bounds for FunctionList of size {len(self)}")
 			return _function.Function(self._view, core.BNNewFunctionReference(self._funcs[i]))
 		elif isinstance(i, slice):
-			result = []
 			start, stop, step = i.indices(len(self))
-			for j in range(start, stop, step):
-				result.append(_function.Function(self._view, core.BNNewFunctionReference(self._funcs[j])))
-			return result
+			return [_function.Function(self._view, core.BNNewFunctionReference(self._funcs[j])) for j in range(start, stop, step)]
 		raise ValueError("FunctionList.__getitem__ supports argument of type integer or slice")
 
 	def __del__(self):
@@ -3838,11 +3835,8 @@ class BinaryView:
 		funcs = core.BNGetAllEntryFunctions(self.handle, count)
 
 		assert funcs is not None, "core.BNGetAllEntryFunctions returned None"
-		result = []
 		try:
-			for i in range(0, count.value):
-				result.append(_function.Function(self, core.BNNewFunctionReference(funcs[i])))
-			return result
+			return[_function.Function(self, core.BNNewFunctionReference(funcs[i])) for i in range(0, count.value)]
 		finally:
 			core.BNFreeFunctionList(funcs, count.value)
 
@@ -3892,9 +3886,7 @@ class BinaryView:
 		assert nameSpaceList is not None, "core.BNGetNameSpaces returned None"
 		result = []
 		try:
-			for i in range(count.value):
-				result.append(_types.NameSpace._from_core_struct(nameSpaceList[i]))
-			return result
+			return [_types.NameSpace._from_core_struct(nameSpaceList[i]) for i in range(count.value)]
 		finally:
 			core.BNFreeNameSpaceList(nameSpaceList, count.value)
 
@@ -3912,9 +3904,7 @@ class BinaryView:
 		if types is None:
 			return result
 		try:
-			for i in range(0, count.value):
-				result.append(BinaryViewType(types[i]))
-			return result
+			return [BinaryViewType(types[i]) for i in range(0, count.value)]
 		finally:
 			core.BNFreeBinaryViewTypeList(types)
 
@@ -3929,10 +3919,7 @@ class BinaryView:
 		strings = core.BNGetDerivedStrings(self.handle, count)
 		assert strings is not None, "core.BNGetDerivedStrings returned None"
 		try:
-			result = []
-			for i in range(0, count.value):
-				result.append(DerivedString._from_core_struct(strings[i], False))
-			return result
+			return[DerivedString._from_core_struct(strings[i], False) for i in range(0, count.value)]
 		finally:
 			core.BNFreeDerivedStringList(strings, count.value)
 
@@ -4030,11 +4017,8 @@ class BinaryView:
 		count = ctypes.c_ulonglong(0)
 		name_list = core.BNGetAnalysisTypeNames(self.handle, count, "")
 		assert name_list is not None, "core.BNGetAnalysisTypeNames returned None"
-		result = []
 		try:
-			for i in range(0, count.value):
-				result.append(_types.QualifiedName._from_core_struct(name_list[i]))
-			return result
+			return[_types.QualifiedName._from_core_struct(name_list[i]) for i in range(0, count.value)]
 		finally:
 			core.BNFreeTypeNameList(name_list, count.value)
 
@@ -4044,11 +4028,8 @@ class BinaryView:
 		count = ctypes.c_ulonglong(0)
 		libraries = core.BNGetBinaryViewTypeLibraries(self.handle, count)
 		assert libraries is not None, "core.BNGetBinaryViewTypeLibraries returned None"
-		result = []
 		try:
-			for i in range(0, count.value):
-				result.append(typelibrary.TypeLibrary(core.BNNewTypeLibraryReference(libraries[i])))
-			return result
+			return[typelibrary.TypeLibrary(core.BNNewTypeLibraryReference(libraries[i])) for i in range(0, count.value)]
 		finally:
 			core.BNFreeTypeLibraryList(libraries, count.value)
 
@@ -4071,7 +4052,7 @@ class BinaryView:
 	def connected_type_archives(self) -> List['typearchive.TypeArchive']:
 		"""All connected type archive objects (read-only)"""
 		result = []
-		for (id, path) in self.attached_type_archives.items():
+		for id in self.attached_type_archives.keys():
 			archive = self.get_type_archive(id)
 			if archive is not None:
 				result.append(archive)
@@ -4115,11 +4096,8 @@ class BinaryView:
 		count = ctypes.c_ulonglong(0)
 		range_list = core.BNGetAllocatedRanges(self.handle, count)
 		assert range_list is not None, "core.BNGetAllocatedRanges returned None"
-		result = []
 		try:
-			for i in range(0, count.value):
-				result.append(variable.AddressRange(range_list[i].start, range_list[i].end))
-			return result
+			return[variable.AddressRange(range_list[i].start, range_list[i].end) for i in range(0, count.value)]
 		finally:
 			core.BNFreeAddressRanges(range_list)
 
@@ -4129,11 +4107,8 @@ class BinaryView:
 		count = ctypes.c_ulonglong(0)
 		range_list = core.BNGetMappedAddressRanges(self.handle, count)
 		assert range_list is not None, "core.BNGetMappedAddressRanges returned None"
-		result = []
 		try:
-			for i in range(0, count.value):
-				result.append(variable.AddressRange(range_list[i].start, range_list[i].end))
-			return result
+			return[variable.AddressRange(range_list[i].start, range_list[i].end) for i in range(0, count.value)]
 		finally:
 			core.BNFreeAddressRanges(range_list)
 
@@ -4143,11 +4118,8 @@ class BinaryView:
 		count = ctypes.c_ulonglong(0)
 		range_list = core.BNGetBackedAddressRanges(self.handle, count)
 		assert range_list is not None, "core.BNGetBackedAddressRanges returned None"
-		result = []
 		try:
-			for i in range(0, count.value):
-				result.append(variable.AddressRange(range_list[i].start, range_list[i].end))
-			return result
+			return[variable.AddressRange(range_list[i].start, range_list[i].end) for i in range(0, count.value)]
 		finally:
 			core.BNFreeAddressRanges(range_list)
 
@@ -5193,16 +5165,14 @@ class BinaryView:
 		:return: list of entropy values for each chunk
 		:rtype: list(float)
 		"""
-		result = []
 		if length == 0:
-			return result
+			return []
 		if block_size == 0:
 			block_size = length
 		data = (ctypes.c_float * ((length//block_size) + 1))()
 		length = core.BNGetEntropy(self.handle, addr, length, block_size, data)
 
-		for i in range(0, length):
-			result.append(float(data[i]))
+		result = [float(data[i]) for i in range(0, length)]
 		return result
 
 	def get_modification(self, addr: int, length: Optional[int] = None) -> List[ModificationStatus]:
@@ -5772,8 +5742,7 @@ class BinaryView:
 		assert funcs is not None, "core.BNGetAnalysisFunctionsContainingAddress returned None"
 		result = []
 		try:
-			for i in range(0, count.value):
-				result.append(_function.Function(self, core.BNNewFunctionReference(funcs[i])))
+			result = [_function.Function(self, core.BNNewFunctionReference(funcs[i])) for i in range(0, count.value)]
 			if plat is not None:
 				result = [func for func in result if func.platform == plat]
 			return result
@@ -5863,11 +5832,8 @@ class BinaryView:
 		count = ctypes.c_ulonglong(0)
 		funcs = core.BNGetAnalysisFunctionsForAddress(self.handle, addr, count)
 		assert funcs is not None, "core.BNGetAnalysisFunctionsForAddress returned None"
-		result = []
 		try:
-			for i in range(0, count.value):
-				result.append(_function.Function(self, core.BNNewFunctionReference(funcs[i])))
-			return result
+			return[_function.Function(self, core.BNNewFunctionReference(funcs[i])) for i in range(0, count.value)]
 		finally:
 			core.BNFreeFunctionList(funcs, count.value)
 
@@ -5999,8 +5965,7 @@ class BinaryView:
 			else:
 				refs = core.BNGetCodeReferencesFromInRange(self.handle, ref_src, length, count)
 				assert refs is not None, "core.BNGetCodeReferencesFromInRange returned None"
-			for i in range(0, count.value):
-				result.append(refs[i])
+			result.extend(refs[i] for i in range(0, count.value))
 			core.BNFreeAddressList(refs)
 		return result
 
@@ -6201,11 +6166,8 @@ class BinaryView:
 		refs = core.BNGetDataReferencesForTypeField(self.handle, _name, offset, count, has_max_items, max_items_value)
 		assert refs is not None, "core.BNGetDataReferencesForTypeField returned None"
 
-		result = []
 		try:
-			for i in range(0, count.value):
-				result.append(refs[i])
-			return result
+			return[refs[i] for i in range(0, count.value)]
 		finally:
 			core.BNFreeDataReferences(refs)
 
@@ -6233,11 +6195,8 @@ class BinaryView:
 		refs = core.BNGetDataReferencesFromForTypeField(self.handle, _name, offset, count, has_max_items, max_items_value)
 		assert refs is not None, "core.BNGetDataReferencesFromForTypeField returned None"
 
-		result = []
 		try:
-			for i in range(0, count.value):
-				result.append(refs[i])
-			return result
+			return[refs[i] for i in range(0, count.value)]
 		finally:
 			core.BNFreeDataReferences(refs)
 
@@ -6472,11 +6431,8 @@ class BinaryView:
 		refs = core.BNGetAllFieldsReferenced(self.handle, _name, count)
 		assert refs is not None, "core.BNGetAllFieldsReferenced returned None"
 
-		result = []
 		try:
-			for i in range(0, count.value):
-				result.append(refs[i])
-			return result
+			return[refs[i] for i in range(0, count.value)]
 		finally:
 			core.BNFreeDataReferences(refs)
 
@@ -6502,9 +6458,7 @@ class BinaryView:
 		result: Mapping[int, List[int]] = {}
 		try:
 			for i in range(0, count.value):
-				result[refs[i].offset] = []
-				for j in range(0, refs[i].count):
-					result[refs[i].offset].append(refs[i].sizes[j])
+				result[refs[i].offset] = [refs[i].sizes[j] for j in range(0, refs[i].count)]
 			return result
 		finally:
 			core.BNFreeTypeFieldReferenceSizeInfo(refs, count.value)
@@ -6562,11 +6516,8 @@ class BinaryView:
 		refs = core.BNGetSizesReferenced(self.handle, _name, offset, count)
 		assert refs is not None, "core.BNGetSizesReferenced returned None"
 
-		result = []
 		try:
-			for i in range(0, count.value):
-				result.append(refs[i])
-			return result
+			return[refs[i] for i in range(0, count.value)]
 		finally:
 			core.BNFreeTypeFieldReferenceSizes(refs, count.value)
 
@@ -6615,8 +6566,7 @@ class BinaryView:
 	def get_outgoing_recursive_type_references(self, names: Union['_types.QualifiedNameType', List['_types.QualifiedNameType']]) -> List['_types.QualifiedName']:
 		qnames = []
 		if isinstance(names, list):
-			for name in names:
-				qnames.append(_types.QualifiedName(name))
+			qnames.extend(_types.QualifiedName(name) for name in names)
 		else:
 			qnames.append(_types.QualifiedName(names))
 		_qnames = (core.BNQualifiedName * len(qnames))()
@@ -6652,8 +6602,7 @@ class BinaryView:
 	def get_incoming_recursive_type_references(self, names: Union['_types.QualifiedNameType', List['_types.QualifiedNameType']]) -> List['_types.QualifiedName']:
 		qnames = []
 		if isinstance(names, list):
-			for name in names:
-				qnames.append(_types.QualifiedName(name))
+			qnames.extend(_types.QualifiedName(name) for name in names)
 		else:
 			qnames.append(_types.QualifiedName(names))
 		_qnames = (core.BNQualifiedName * len(qnames))()
@@ -6827,8 +6776,7 @@ class BinaryView:
 			refs = core.BNGetCallees(self.handle, ref_src, count)
 			assert refs is not None, "core.BNGetCallees returned None"
 			try:
-				for i in range(0, count.value):
-					result.append(refs[i])
+				result.extend(refs[i] for i in range(0, count.value))
 			finally:
 				core.BNFreeAddressList(refs)
 		return result
@@ -7927,26 +7875,22 @@ class BinaryView:
 		raise TypeError("Removal is only supported with a Component or string representing its Guid")
 
 	def get_function_parent_components(self, function: '_function.Function') -> List['component.Component']:
-		_components = []
 		count = ctypes.c_ulonglong(0)
 		bn_components = core.BNGetFunctionParentComponents(self.handle, function.handle, count)
 		try:
-			for i in range(count.value):
-				_components.append(component.Component(core.BNNewComponentReference(bn_components[i])))
+			_components = [component.Component(core.BNNewComponentReference(bn_components[i])) for i in range(count.value)]
+			return _components
 		finally:
 			core.BNFreeComponents(bn_components, count.value)
-		return _components
 
 	def get_data_variable_parent_components(self, data_variable: 'DataVariable') -> List['component.Component']:
-		_components = []
 		count = ctypes.c_ulonglong(0)
 		bn_components = core.BNGetDataVariableParentComponents(self.handle, data_variable.address, count)
 		try:
-			for i in range(count.value):
-				_components.append(component.Component(core.BNNewComponentReference(bn_components[i])))
+			_components = [component.Component(core.BNNewComponentReference(bn_components[i])) for i in range(count.value)]
+			return _components
 		finally:
 			core.BNFreeComponents(bn_components, count.value)
-		return _components
 
 	def get_strings(self, start: Optional[int] = None, length: Optional[int] = None) -> List['StringReference']:
 		"""
@@ -7974,11 +7918,8 @@ class BinaryView:
 				length = self.end - start
 			strings = core.BNGetStringsInRange(self.handle, start, length, count)
 			assert strings is not None, "core.BNGetStringsInRange returned None"
-		result = []
 		try:
-			for i in range(0, count.value):
-				result.append(StringReference(self, StringType(strings[i].type), strings[i].start, strings[i].length))
-			return result
+			return[StringReference(self, StringType(strings[i].type), strings[i].start, strings[i].length) for i in range(0, count.value)]
 		finally:
 			core.BNFreeStringReferenceList(strings)
 
@@ -9336,16 +9277,13 @@ to a the type "tagRECT" found in the typelibrary "winX64common"
 		archive_ids = ctypes.POINTER(ctypes.c_char_p)()
 		type_ids = ctypes.POINTER(ctypes.c_char_p)()
 		id_count = core.BNBinaryViewGetTypeArchiveTypeNames(self.handle, name._to_core_struct(), archive_ids, type_ids)
-		ids = []
 
 		type_archives = self.connected_type_archives
 		type_archives_by_id = {}
 		for archive in type_archives:
 			type_archives_by_id[archive.id] = archive
 		try:
-			for j in range(0, id_count):
-				ids.append((type_archives_by_id[core.pyNativeStr(archive_ids[j])], core.pyNativeStr(type_ids[j])))
-			return ids
+			return [(type_archives_by_id[core.pyNativeStr(archive_ids[j])], core.pyNativeStr(type_ids[j])) for j in range(0, id_count)]
 		finally:
 			core.BNFreeStringList(archive_ids, id_count)
 			core.BNFreeStringList(type_ids, id_count)
@@ -9361,7 +9299,7 @@ to a the type "tagRECT" found in the typelibrary "winX64common"
 
 		type_archives = self.attached_type_archives
 		type_archives_by_id = {}
-		for (archive_id, _) in type_archives.items():
+		for archive_id in type_archives.keys():
 			type_archives_by_id[archive_id] = self.get_type_archive(archive_id)
 
 		for type_id, (archive_id, archive_type_id) in self.associated_type_archive_type_ids.items():
@@ -10520,11 +10458,8 @@ to a the type "tagRECT" found in the typelibrary "winX64common"
 			incoming_names[i] = name_list[i].encode("utf-8")
 		outgoing_names = core.BNGetUniqueSectionNames(self.handle, incoming_names, len(name_list))
 		assert outgoing_names is not None, "core.BNGetUniqueSectionNames returned None"
-		result = []
 		try:
-			for i in range(0, len(name_list)):
-				result.append(outgoing_names[i].decode("utf-8"))
-			return result
+			return[outgoing_names[i].decode("utf-8") for i in range(0, len(name_list))]
 		finally:
 			core.BNFreeStringList(outgoing_names, len(name_list))
 
@@ -10744,9 +10679,7 @@ to a the type "tagRECT" found in the typelibrary "winX64common"
 		names = core.BNBinaryViewGetLoadSettingsTypeNames(self.handle, count)
 		assert names is not None, "core.BNBinaryViewGetLoadSettingsTypeNames returned None"
 		try:
-			for i in range(count.value):
-				result.append(names[i])
-			return result
+			return [names[i] for i in range(count.value)]
 		finally:
 			core.BNFreeStringList(names, count.value)
 

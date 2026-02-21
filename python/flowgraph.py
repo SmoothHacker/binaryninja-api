@@ -258,9 +258,7 @@ class FlowGraphNode:
 			target = edges[i].target
 			if target:
 				target = FlowGraphNode(self._graph, core.BNNewFlowGraphNodeReference(target))
-			points = []
-			for j in range(0, edges[i].pointCount):
-				points.append((edges[i].points[j].x, edges[i].points[j].y))
+			points = [(edges[i].points[j].x, edges[i].points[j].y) for j in range(0, edges[i].pointCount)]
 			result.append(
 			    FlowGraphEdge(branch_type, self, target, points, edges[i].backEdge, EdgeStyle(edges[i].style))
 			)
@@ -279,9 +277,7 @@ class FlowGraphNode:
 			target = edges[i].target
 			if target:
 				target = FlowGraphNode(self._graph, core.BNNewFlowGraphNodeReference(target))
-			points = []
-			for j in range(0, edges[i].pointCount):
-				points.append((edges[i].points[j].x, edges[i].points[j].y))
+			points = [(edges[i].points[j].x, edges[i].points[j].y) for j in range(0, edges[i].pointCount)]
 			result.append(
 			    FlowGraphEdge(branch_type, self, target, points, edges[i].backEdge, EdgeStyle(edges[i].style))
 			)
@@ -885,10 +881,7 @@ class FlowGraph:
 		assert layers is not None, "core.BNGetFlowGraphRenderLayers returned None"
 
 		try:
-			result = []
-			for i in range(0, count.value):
-				result.append(binaryninja.RenderLayer(handle=layers[i]))
-
+			result = [binaryninja.RenderLayer(handle=layers[i]) for i in range(0, count.value)]
 			return result
 		finally:
 			core.BNFreeRenderLayerList(layers)
@@ -946,9 +939,7 @@ class FlowGraphLayout:
 	def _layout(self, ctxt, graph_handle: core.BNFlowGraphHandle, node_handles: 'ctypes.pointer[core.BNFlowGraphNodeHandle]', node_handle_count: int) -> bool:
 		try:
 			graph = FlowGraph(handle=graph_handle)
-			nodes = []
-			for i in range(node_handle_count):
-				nodes.append(FlowGraphNode(graph=graph, handle=node_handles[i]))
+			nodes = [FlowGraphNode(graph=graph, handle=node_handles[i]) for i in range(node_handle_count)]
 			return self.layout(graph, nodes)
 		except Exception:
 			log_error_for_exception("Unhandled Python exception in FlowGraphLayout._layout")

@@ -207,9 +207,7 @@ class CollabSnapshot:
 		value = core.BNCollaborationSnapshotGetParentIds(self._handle, count)
 		if not value:
 			raise RuntimeError(util._last_error())
-		result = []
-		for i in range(count.value):
-			result.append(value[i])
+		result = [value[i] for i in range(count.value)]
 		return result
 
 	@property
@@ -224,9 +222,7 @@ class CollabSnapshot:
 		value = core.BNCollaborationSnapshotGetChildIds(self._handle, count)
 		if not value:
 			raise RuntimeError(util._last_error())
-		result = []
-		for i in range(count.value):
-			result.append(value[i])
+		result = [value[i] for i in range(count.value)]
 		return result
 
 	@property
@@ -241,9 +237,7 @@ class CollabSnapshot:
 		value = core.BNCollaborationSnapshotGetParents(self._handle, count)
 		if not value:
 			raise RuntimeError(util._last_error())
-		result = []
-		for i in range(count.value):
-			result.append(CollabSnapshot(handle=value[i]))
+		result = [CollabSnapshot(handle=value[i]) for i in range(count.value)]
 		return result
 
 	@property
@@ -258,9 +252,7 @@ class CollabSnapshot:
 		value = core.BNCollaborationSnapshotGetChildren(self._handle, count)
 		if not value:
 			raise RuntimeError(util._last_error())
-		result = []
-		for i in range(count.value):
-			result.append(CollabSnapshot(handle=value[i]))
+		result = [CollabSnapshot(handle=value[i]) for i in range(count.value)]
 		return result
 
 	@property
@@ -280,9 +272,7 @@ class CollabSnapshot:
 		value = core.BNCollaborationSnapshotGetUndoEntries(self._handle, count)
 		if not value:
 			raise RuntimeError(util._last_error())
-		result = []
-		for i in range(count.value):
-			result.append(UndoEntry(handle=value[i]))
+		result = [UndoEntry(handle=value[i]) for i in range(count.value)]
 		return result
 
 	def get_undo_entry_by_id(self, id: int) -> Optional['UndoEntry']:

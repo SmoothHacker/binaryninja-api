@@ -182,9 +182,7 @@ class TypeLibrary:
 		names = core.BNGetTypeLibraryAlternateNames(self.handle, count)
 		assert names is not None, "core.BNGetTypeLibraryAlternateNames returned None"
 		try:
-			for i in range(count.value):
-				result.append(names[i].decode("utf-8"))
-			return result
+			return [names[i].decode("utf-8") for i in range(count.value)]
 		finally:
 			core.BNFreeStringList(names, count.value)
 
@@ -208,9 +206,7 @@ class TypeLibrary:
 		platforms = core.BNGetTypeLibraryPlatforms(self.handle, count)
 		assert platforms is not None, "core.BNGetTypeLibraryPlatforms returned None"
 		try:
-			for i in range(0, count.value):
-				result.append(platforms[i].decode("utf-8"))
-			return result
+			return [platforms[i].decode("utf-8") for i in range(0, count.value)]
 		finally:
 			core.BNFreeStringList(platforms, count.value)
 

@@ -57,9 +57,7 @@ class Changeset:
 		snapshot_ids = core.BNCollaborationChangesetGetSnapshotIds(self._handle, count)
 		if snapshot_ids is None:
 			raise RuntimeError(util._last_error())
-		result = []
-		for i in range(count.value):
-			result.append(snapshot_ids[i])
+		result = [snapshot_ids[i] for i in range(count.value)]
 		core.BNCollaborationFreeSnapshotIdList(snapshot_ids, count.value)
 		return result
 

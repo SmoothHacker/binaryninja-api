@@ -484,15 +484,13 @@ class BasicBlock:
 		if pending_edges is None:
 			return []
 
-		result: List[PendingBasicBlockEdge] = []
 		try:
-			for i in range(count.value):
-				result.append(PendingBasicBlockEdge(
+			result: List[PendingBasicBlockEdge] = [PendingBasicBlockEdge(
 					type=BranchType(pending_edges[i].type),
 					arch=architecture.CoreArchitecture._from_cache(pending_edges[i].arch),
 					target=pending_edges[i].target,
 					fallthrough=pending_edges[i].fallThrough
-				))
+				) for i in range(count.value)]
 			return result
 		finally:
 			core.BNFreePendingBasicBlockEdgeList(pending_edges)

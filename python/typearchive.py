@@ -171,11 +171,8 @@ class TypeArchive:
 		ids = core.BNGetTypeArchiveAllSnapshotIds(self.handle, count)
 		if ids is None:
 			raise RuntimeError("BNGetTypeArchiveAllSnapshotIds")
-		result = []
 		try:
-			for i in range(0, count.value):
-				result.append(core.pyNativeStr(ids[i]))
-			return result
+			return [core.pyNativeStr(ids[i]) for i in range(0, count.value)]
 		finally:
 			core.BNFreeStringList(ids, count.value)
 
@@ -190,11 +187,8 @@ class TypeArchive:
 		ids = core.BNGetTypeArchiveSnapshotParentIds(self.handle, snapshot, count)
 		if ids is None:
 			raise RuntimeError("BNGetTypeArchiveSnapshotParentIds")
-		result = []
 		try:
-			for i in range(0, count.value):
-				result.append(core.pyNativeStr(ids[i]))
-			return result
+			return [core.pyNativeStr(ids[i]) for i in range(0, count.value)]
 		finally:
 			core.BNFreeStringList(ids, count.value)
 
@@ -209,11 +203,8 @@ class TypeArchive:
 		ids = core.BNGetTypeArchiveSnapshotChildIds(self.handle, snapshot, count)
 		if ids is None:
 			raise RuntimeError("BNGetTypeArchiveSnapshotChildIds")
-		result = []
 		try:
-			for i in range(0, count.value):
-				result.append(core.pyNativeStr(ids[i]))
-			return result
+			return [core.pyNativeStr(ids[i]) for i in range(0, count.value)]
 		finally:
 			core.BNFreeStringList(ids, count.value)
 
@@ -391,10 +382,7 @@ class TypeArchive:
 		:param snapshot: Snapshot id to search for types, or None to search the latest snapshot
 		:return: Map of all types, by name
 		"""
-		result = {}
-		for id, (name, type) in self.get_types_and_ids(snapshot).items():
-			result[name] = type
-		return result
+		return {name: type for (name, type) in self.get_types_and_ids(snapshot).values()}
 
 	def get_types_and_ids(self, snapshot: Optional[str] = None) -> Dict[str, Tuple[_types.QualifiedName, _types.Type]]:
 		"""
@@ -437,13 +425,10 @@ class TypeArchive:
 		if snapshot is None:
 			snapshot = self.current_snapshot_id
 		count = ctypes.c_ulonglong(0)
-		result = []
 		ids = core.BNGetTypeArchiveTypeIds(self.handle, snapshot, count)
 		assert ids is not None, "core.BNGetTypeArchiveTypeIds returned None"
 		try:
-			for i in range(count.value):
-				result.append(core.pyNativeStr(ids[i]))
-			return result
+			return [core.pyNativeStr(ids[i]) for i in range(count.value)]
 		finally:
 			core.BNFreeStringList(ids, count.value)
 
@@ -469,9 +454,7 @@ class TypeArchive:
 		names = core.BNGetTypeArchiveTypeNames(self.handle, snapshot, count)
 		assert names is not None, "core.BNGetTypeArchiveTypeNames returned None"
 		try:
-			for i in range(count.value):
-				result.append(_types.QualifiedName._from_core_struct(names[i]))
-			return result
+			return [_types.QualifiedName._from_core_struct(names[i]) for i in range(count.value)]
 		finally:
 			core.BNFreeQualifiedNameArray(names, count.value)
 
@@ -523,11 +506,8 @@ class TypeArchive:
 		ids = core.BNGetTypeArchiveOutgoingDirectTypeReferences(self.handle, id, snapshot, count)
 		if ids is None:
 			raise RuntimeError("BNGetTypeArchiveOutgoingDirectTypeReferences")
-		result = []
 		try:
-			for i in range(0, count.value):
-				result.append(core.pyNativeStr(ids[i]))
-			return result
+			return [core.pyNativeStr(ids[i]) for i in range(0, count.value)]
 		finally:
 			core.BNFreeStringList(ids, count.value)
 
@@ -546,11 +526,8 @@ class TypeArchive:
 		ids = core.BNGetTypeArchiveOutgoingRecursiveTypeReferences(self.handle, id, snapshot, count)
 		if ids is None:
 			raise RuntimeError("BNGetTypeArchiveOutgoingRecursiveTypeReferences")
-		result = []
 		try:
-			for i in range(0, count.value):
-				result.append(core.pyNativeStr(ids[i]))
-			return result
+			return [core.pyNativeStr(ids[i]) for i in range(0, count.value)]
 		finally:
 			core.BNFreeStringList(ids, count.value)
 
@@ -569,11 +546,8 @@ class TypeArchive:
 		ids = core.BNGetTypeArchiveIncomingDirectTypeReferences(self.handle, id, snapshot, count)
 		if ids is None:
 			raise RuntimeError("BNGetTypeArchiveIncomingDirectTypeReferences")
-		result = []
 		try:
-			for i in range(0, count.value):
-				result.append(core.pyNativeStr(ids[i]))
-			return result
+			return [core.pyNativeStr(ids[i]) for i in range(0, count.value)]
 		finally:
 			core.BNFreeStringList(ids, count.value)
 
@@ -592,11 +566,8 @@ class TypeArchive:
 		ids = core.BNGetTypeArchiveIncomingRecursiveTypeReferences(self.handle, id, snapshot, count)
 		if ids is None:
 			raise RuntimeError("BNGetTypeArchiveIncomingRecursiveTypeReferences")
-		result = []
 		try:
-			for i in range(0, count.value):
-				result.append(core.pyNativeStr(ids[i]))
-			return result
+			return [core.pyNativeStr(ids[i]) for i in range(0, count.value)]
 		finally:
 			core.BNFreeStringList(ids, count.value)
 

@@ -241,9 +241,7 @@ class AnalysisContext:
 		"""
 		count = ctypes.c_size_t()
 		result = core.BNAnalysisContextGetSettingStringList(self.handle, key, ctypes.byref(count))
-		out_list = []
-		for i in range(count.value):
-			out_list.append(result[i].decode('utf-8'))
+		out_list = [result[i].decode('utf-8') for i in range(count.value)]
 		core.BNFreeStringList(result, count.value)
 		return out_list
 
@@ -336,9 +334,7 @@ class AnalysisContext:
 		"""
 		count = ctypes.c_ulonglong()
 		sections = core.BNAnalysisContextGetSections(self.handle, count)
-		result = []
-		for i in range(count.value):
-			result.append(binaryninja.binaryview.Section(core.BNNewSectionReference(sections[i])))
+		result = [binaryninja.binaryview.Section(core.BNNewSectionReference(sections[i])) for i in range(count.value)]
 		core.BNFreeSectionList(sections, count.value)
 		return result
 
@@ -363,9 +359,7 @@ class AnalysisContext:
 		"""
 		count = ctypes.c_ulonglong()
 		sections = core.BNAnalysisContextGetSectionsAt(self.handle, addr, count)
-		result = []
-		for i in range(count.value):
-			result.append(binaryninja.binaryview.Section(core.BNNewSectionReference(sections[i])))
+		result = [binaryninja.binaryview.Section(core.BNNewSectionReference(sections[i])) for i in range(count.value)]
 		core.BNFreeSectionList(sections, count.value)
 		return result
 
@@ -442,9 +436,7 @@ class AnalysisContext:
 		"""
 		count = ctypes.c_size_t()
 		ranges = core.BNAnalysisContextGetMappedAddressRanges(self.handle, ctypes.byref(count))
-		result = []
-		for i in range(count.value):
-			result.append((ranges[i].start, ranges[i].end))
+		result = [(ranges[i].start, ranges[i].end) for i in range(count.value)]
 		core.BNFreeAddressRanges(ranges)
 		return result
 
@@ -456,9 +448,7 @@ class AnalysisContext:
 		"""
 		count = ctypes.c_size_t()
 		ranges = core.BNAnalysisContextGetBackedAddressRanges(self.handle, ctypes.byref(count))
-		result = []
-		for i in range(count.value):
-			result.append((ranges[i].start, ranges[i].end))
+		result = [(ranges[i].start, ranges[i].end) for i in range(count.value)]
 		core.BNFreeAddressRanges(ranges)
 		return result
 
@@ -776,11 +766,8 @@ class Workflow(metaclass=_WorkflowMetaclass):
 		length = ctypes.c_ulonglong()
 		result = core.BNWorkflowGetActivityRoots(self.handle, str(activity), ctypes.byref(length))
 		assert result is not None, "core.BNWorkflowGetActivityRoots returned None"
-		out_list = []
 		try:
-			for i in range(length.value):
-				out_list.append(result[i].decode('utf-8'))
-			return out_list
+			return [result[i].decode('utf-8') for i in range(length.value)]
 		finally:
 			core.BNFreeStringList(result, length.value)
 
@@ -796,11 +783,8 @@ class Workflow(metaclass=_WorkflowMetaclass):
 		length = ctypes.c_ulonglong()
 		result = core.BNWorkflowGetSubactivities(self.handle, str(activity), immediate, ctypes.byref(length))
 		assert result is not None, "core.BNWorkflowGetSubactivities returned None"
-		out_list = []
 		try:
-			for i in range(length.value):
-				out_list.append(result[i].decode('utf-8'))
-			return out_list
+			return [result[i].decode('utf-8') for i in range(length.value)]
 		finally:
 			core.BNFreeStringList(result, length.value)
 
@@ -918,10 +902,8 @@ class Workflow(metaclass=_WorkflowMetaclass):
 		length = ctypes.c_ulonglong()
 		result = core.BNWorkflowGetEligibilitySettings(self.handle, ctypes.byref(length))
 		assert result is not None, "core.BNWorkflowGetEligibilitySettings returned None"
-		out_list = []
 		try:
-			for i in range(length.value):
-				out_list.append(result[i].decode('utf-8'))
+			out_list = [result[i].decode('utf-8') for i in range(range(length.value))]
 			return out_list
 		finally:
 			core.BNFreeStringList(result, length.value)

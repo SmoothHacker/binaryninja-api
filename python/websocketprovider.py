@@ -225,9 +225,7 @@ class _WebsocketProviderMetaclass(type):
 		binaryninja._init_plugins()
 		count = ctypes.c_ulonglong()
 		types = core.BNGetWebsocketProviderList(count)
-		result = []
-		for i in range(0, count.value):
-			result.append(WebsocketProvider(types[i]))
+		result = [WebsocketProvider(types[i]) for i in range(0, count.value)]
 		core.BNFreeWebsocketProviderList(types)
 		return result
 

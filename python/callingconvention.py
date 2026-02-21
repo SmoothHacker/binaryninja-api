@@ -131,10 +131,8 @@ class CallingConvention:
 			count = ctypes.c_ulonglong()
 			regs = core.BNGetCallerSavedRegisters(_handle, count)
 			assert regs is not None, "core.BNGetCallerSavedRegisters returned None"
-			result = []
 			arch = self.arch
-			for i in range(0, count.value):
-				result.append(arch.get_reg_name(regs[i]))
+			result = [arch.get_reg_name(regs[i]) for i in range(0, count.value)]
 			core.BNFreeRegisterList(regs)
 			self.__dict__["caller_saved_regs"] = result
 

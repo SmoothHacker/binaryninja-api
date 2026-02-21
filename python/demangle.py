@@ -158,7 +158,6 @@ def demangle_ms(archOrPlatform: Union[Architecture, Platform], mangled_name: str
 	handle = ctypes.POINTER(core.BNType)()
 	outName = ctypes.POINTER(ctypes.c_char_p)()
 	outSize = ctypes.c_ulonglong()
-	names = []
 
 	demangle = core.BNDemangleMS
 	demangleWithOptions = core.BNDemangleMSWithOptions
@@ -179,8 +178,7 @@ def demangle_ms(archOrPlatform: Union[Architecture, Platform], mangled_name: str
 	        archOrPlatform.handle, mangled_name, ctypes.byref(handle), ctypes.byref(outName), ctypes.byref(outSize), None
 	    )
 	):
-		for i in range(outSize.value):
-			names.append(outName[i].decode('utf8'))  # type: ignore
+		names = [outName[i].decode('utf8') for i in range(outSize.value)]
 		core.BNFreeDemangledName(ctypes.byref(outName), outSize.value)
 		if not handle:
 			return (None, names)
@@ -202,7 +200,6 @@ def demangle_gnu3(arch, mangled_name: str, options: Optional[Union[bool, binaryv
 	handle = ctypes.POINTER(core.BNType)()
 	outName = ctypes.POINTER(ctypes.c_char_p)()
 	outSize = ctypes.c_ulonglong()
-	names = []
 	if (
 	    isinstance(options, binaryview.BinaryView) and core.BNDemangleGNU3WithOptions(
 	        arch.handle, mangled_name, ctypes.byref(handle), ctypes.byref(outName), ctypes.byref(outSize), options.handle
@@ -216,8 +213,7 @@ def demangle_gnu3(arch, mangled_name: str, options: Optional[Union[bool, binaryv
 	        arch.handle, mangled_name, ctypes.byref(handle), ctypes.byref(outName), ctypes.byref(outSize), None
 	    )
 	):
-		for i in range(outSize.value):
-			names.append(outName[i].decode('utf8'))  # type: ignore
+		names = [outName[i].decode('utf8') for i in range(outSize.value)]
 		core.BNFreeDemangledName(ctypes.byref(outName), outSize.value)
 		if not handle:
 			return (None, names)

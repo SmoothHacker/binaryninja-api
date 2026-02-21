@@ -81,9 +81,7 @@ class Group:
 		usernames = ctypes.POINTER(ctypes.c_char_p)()
 		if not core.BNCollaborationGroupGetUsers(self._handle, user_ids, usernames, count):
 			raise RuntimeError(util._last_error())
-		result = []
-		for i in range(count.value):
-			result.append((core.pyNativeStr(user_ids[i]), core.pyNativeStr(usernames[i])))
+		result = [(core.pyNativeStr(user_ids[i]), core.pyNativeStr(usernames[i])) for i in range(count.value)]
 		core.BNFreeStringList(user_ids, count.value)
 		core.BNFreeStringList(usernames, count.value)
 		return result

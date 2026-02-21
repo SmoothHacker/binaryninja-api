@@ -309,9 +309,7 @@ class RemoteFile:
 		value = core.BNRemoteFileGetSnapshots(self._handle, count)
 		if value is None:
 			raise RuntimeError(util._last_error())
-		result = []
-		for i in range(count.value):
-			result.append(snapshot.CollabSnapshot(value[i]))
+		result = [snapshot.CollabSnapshot(value[i]) for i in range(count.value)]
 		return result
 
 	def get_snapshot_by_id(self, id: str) -> Optional['snapshot.CollabSnapshot']:

@@ -646,9 +646,7 @@ class InteractionHandler:
 
 	def _get_choice_input(self, ctxt, result, prompt, title, choice_buf, count):
 		try:
-			choices = []
-			for i in range(0, count):
-				choices.append(choice_buf[i])
+			choices = [choice_buf[i] for i in range(0, count)]
 			value = self.get_choice_input(prompt, title, choices)
 			if value is None:
 				return False
@@ -659,9 +657,7 @@ class InteractionHandler:
 
 	def _get_large_choice_input(self, ctxt, result, prompt, title, choice_buf, count):
 		try:
-			choices = []
-			for i in range(0, count):
-				choices.append(choice_buf[i])
+			choices = [choice_buf[i] for i in range(0, count)]
 			value = self.get_large_choice_input(prompt, title, choices)
 			if value is None:
 				return False
@@ -745,9 +741,7 @@ class InteractionHandler:
 					    )
 					)
 				elif fields[i].type == FormInputFieldType.ChoiceFormField:
-					choices = []
-					for j in range(0, fields[i].count):
-						choices.append(fields[i].choices[j])
+					choices = [fields[i].choices[j] for j in range(0, fields[i].count)]
 					field_objs.append(
 					    ChoiceField(
 					        fields[i].prompt, choices, default=fields[i].choiceDefault if fields[i].hasDefault else None

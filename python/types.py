@@ -170,9 +170,7 @@ class QualifiedName:
 
 	@staticmethod
 	def _from_core_struct(name):
-		result = []
-		for i in range(0, name.nameCount):
-			result.append(name.name[i].decode("utf-8"))
+		result = [name.name[i].decode("utf-8") for i in range(0, name.nameCount)]
 		return QualifiedName(result, name.join)
 
 	@property
@@ -229,9 +227,7 @@ class NameSpace(QualifiedName):
 
 	@staticmethod
 	def _from_core_struct(name: core.BNNameSpace) -> 'NameSpace':
-		result = []
-		for i in range(0, name.nameCount):
-			result.append(name.name[i].decode("utf-8"))
+		result = [name.name[i].decode("utf-8") for i in range(0, name.nameCount)]
 		return NameSpace(result, name.join)
 
 	@staticmethod
@@ -1062,9 +1058,7 @@ class PointerBuilder(TypeBuilder):
 		suffix = core.BNGetTypeBuilderPointerSuffix(self._handle, count)
 		assert suffix is not None, "core.BNGetTypeBuilderPointerSuffix returned None"
 		try:
-			result = []
-			for i in range(count.value):
-				result.append(PointerSuffix(suffix[i]))
+			result = [PointerSuffix(suffix[i]) for i in range(count.value)]
 			return result
 		finally:
 			core.BNFreePointerSuffixList(suffix, count)
@@ -1626,9 +1620,7 @@ class StructureBuilder(TypeBuilder):
 		count = ctypes.c_ulonglong()
 		bases = core.BNGetBaseStructuresForStructureBuilder(self.builder_handle, count)
 		try:
-			result = []
-			for i in range(0, count.value):
-				result.append(BaseStructure._from_core_struct(bases[i], self.platform))
+			result = [BaseStructure._from_core_struct(bases[i], self.platform) for i in range(0, count.value)]
 			return result
 		finally:
 			core.BNFreeBaseStructureList(bases, count.value)
@@ -2325,12 +2317,10 @@ class Type:
 		else:
 			assert False, "Unexpected type container type"
 		if isinstance(name, QualifiedName):
-		    name = str(name)
+			name = str(name)
 		core_lines = core.BNGetTypeLines(self._handle, container.handle, name, padding_cols, collapsed, escaping, count)
 		assert core_lines is not None, "core.BNGetTypeLines returned None"
-		lines = []
-		for i in range(count.value):
-			lines.append(TypeDefinitionLine._from_core_struct(core_lines[i]))
+		lines = [TypeDefinitionLine._from_core_struct(core_lines[i]) for i in range(count.value)]
 		core.BNFreeTypeDefinitionLineList(core_lines, count.value)
 		return lines
 
@@ -2797,15 +2787,11 @@ class StructureType(Type):
 		members = core.BNGetStructureMembers(self.struct_handle, count)
 		assert members is not None, "core.BNGetStructureMembers returned None"
 		try:
-			result = []
-			for i in range(0, count.value):
-				result.append(
-				    StructureMember(
+			result = [StructureMember(
 				        Type.create(core.BNNewTypeReference(members[i].type), confidence=members[i].typeConfidence),
 				        members[i].name, members[i].offset, MemberAccess(members[i].access),
 				        MemberScope(members[i].scope), members[i].bitPosition, members[i].bitWidth
-				    )
-				)
+				    ) for i in range(0, count.value)]
 		finally:
 			core.BNFreeStructureMemberList(members, count.value)
 		return result
@@ -2817,9 +2803,7 @@ class StructureType(Type):
 		count = ctypes.c_ulonglong()
 		bases = core.BNGetBaseStructuresForStructure(self.struct_handle, count)
 		try:
-			result = []
-			for i in range(0, count.value):
-				result.append(BaseStructure._from_core_struct(bases[i], self.platform))
+			result = [BaseStructure._from_core_struct(bases[i], self.platform) for i in range(0, count.value)]
 			return result
 		finally:
 			core.BNFreeBaseStructureList(bases, count.value)
@@ -3144,9 +3128,7 @@ class PointerType(Type):
 		suffix = core.BNGetTypePointerSuffix(self.handle, count)
 		assert suffix is not None, "core.BNGetTypePointerSuffix returned None"
 		try:
-			result = []
-			for i in range(count.value):
-				result.append(suffix[i])
+			result = [suffix[i] for i in range(count.value)]
 			return result
 		finally:
 			core.BNFreePointerSuffixList(suffix, count)

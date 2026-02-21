@@ -308,9 +308,7 @@ class RemoteProject:
 		value = core.BNRemoteProjectGetFiles(self._handle, count)
 		if value is None:
 			raise RuntimeError(util._last_error())
-		result = []
-		for i in range(count.value):
-			result.append(file.RemoteFile(value[i]))
+		result = [file.RemoteFile(value[i]) for i in range(count.value)]
 		return result
 
 	def get_file_by_id(self, id: str) -> Optional['file.RemoteFile']:
@@ -468,9 +466,7 @@ class RemoteProject:
 		value = core.BNRemoteProjectGetFolders(self._handle, count)
 		if value is None:
 			raise RuntimeError(util._last_error())
-		result = []
-		for i in range(count.value):
-			result.append(folder.RemoteFolder(value[i]))
+		result = [folder.RemoteFolder(value[i]) for i in range(count.value)]
 		return result
 
 	def get_folder_by_id(self, id: str) -> Optional['folder.RemoteFolder']:
@@ -588,9 +584,7 @@ class RemoteProject:
 		value = core.BNRemoteProjectGetGroupPermissions(self._handle, count)
 		if value is None:
 			raise RuntimeError(util._last_error())
-		result = []
-		for i in range(count.value):
-			result.append(permission.Permission(value[i]))
+		result = [permission.Permission(value[i]) for i in range(count.value)]
 		return result
 
 	@property
@@ -610,9 +604,7 @@ class RemoteProject:
 		value = core.BNRemoteProjectGetUserPermissions(self._handle, count)
 		if value is None:
 			raise RuntimeError(util._last_error())
-		result = []
-		for i in range(count.value):
-			result.append(permission.Permission(value[i]))
+		result = [permission.Permission(value[i]) for i in range(count.value)]
 		return result
 
 	def get_permission_by_id(self, id: str) -> Optional['permission.Permission']:

@@ -139,9 +139,7 @@ class RenderLayer(metaclass=_RenderLayerMetaclass):
 			prev_obj = binaryninja.LinearViewObject(core.BNNewLinearViewObjectReference(prev)) if prev else None
 			next_obj = binaryninja.LinearViewObject(core.BNNewLinearViewObjectReference(next)) if next else None
 
-			lines = []
-			for i in range(in_line_count):
-				lines.append(LinearDisassemblyLine._from_core_struct(in_lines[i], obj=obj_obj))
+			lines = [LinearDisassemblyLine._from_core_struct(in_lines[i], obj=obj_obj) for i in range(in_line_count)]
 
 			lines = self.apply_to_linear_view_object(obj_obj, prev_obj, next_obj, lines)
 
@@ -377,15 +375,12 @@ class RenderLayer(metaclass=_RenderLayerMetaclass):
 							disasm_lines = self.apply_to_block(last_block, disasm_lines)
 							func = block_lines[0].function
 							block = block_lines[0].block
-							for block_line in disasm_lines:
-								new_block_lines.append(
-									LinearDisassemblyLine(
+							new_block_lines.extend(LinearDisassemblyLine(
 										LinearDisassemblyLineType.CodeDisassemblyLineType,
 										func,
 										block,
 										block_line
-									)
-								)
+									) for block_line in disasm_lines)
 							disasm_lines = []
 
 					def process_misc():
@@ -459,9 +454,7 @@ class CoreRenderLayer(RenderLayer):
 			out_line_count
 		)
 
-		result = []
-		for i in range(out_line_count.value):
-			result.append(binaryninja.LinearDisassemblyLine._from_core_struct(out_lines[i], obj=obj))
+		result = [binaryninja.LinearDisassemblyLine._from_core_struct(out_lines[i], obj=obj) for i in range(out_line_count.value)]
 
 		core.BNFreeLinearDisassemblyLines(out_lines, out_line_count.value)
 

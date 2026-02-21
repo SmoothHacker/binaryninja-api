@@ -267,9 +267,7 @@ class BaseAddressDetection:
             return []
 
         try:
-            result = list()
-            for i in range(count.value):
-                result.append(BaseAddressDetectionReason(reasons[i].Pointer, reasons[i].POIOffset, reasons[i].POIType))
+            result = [BaseAddressDetectionReason(reasons[i].Pointer, reasons[i].POIOffset, reasons[i].POIType) for i in range(count.value)]
             return result
         finally:
             core.BNFreeBaseAddressDetectionReasons(reasons)

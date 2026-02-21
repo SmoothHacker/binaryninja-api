@@ -672,8 +672,6 @@ class FileMetadata:
 		length = ctypes.c_ulonglong()
 		result = core.BNGetExistingViews(self.handle, ctypes.byref(length))
 		assert result is not None, "core.BNGetExistingViews returned None"
-		views = []
-		for i in range(length.value):
-			views.append(result[i].decode("utf-8"))
+		views = [result[i].decode("utf-8") for i in range(length.value)]
 		core.BNFreeStringList(result, length.value)
 		return views

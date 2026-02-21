@@ -57,9 +57,7 @@ def known_remotes() -> List['Remote']:
 	binaryninja._init_plugins()
 	count = ctypes.c_size_t()
 	value = core.BNCollaborationGetRemotes(count)
-	result = []
-	for i in range(count.value):
-		result.append(Remote(handle=value[i]))
+	result = [Remote(handle=value[i]) for i in range(count.value)]
 	return result
 
 

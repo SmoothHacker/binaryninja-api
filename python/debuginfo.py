@@ -373,9 +373,7 @@ class DebugInfo(object):
 				else:
 					func_platform = None
 
-				components = []
-				for c in range(0, function.componentN):
-					components.append(function.components[c])
+				components = [function.components[c] for c in range(0, function.componentN)]
 
 				local_variables = []
 				for c in range(0, function.localVariableN):

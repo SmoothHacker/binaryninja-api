@@ -93,9 +93,7 @@ def authentication_methods() -> List[Tuple[str, str]]:
 	methods = ctypes.POINTER(ctypes.c_char_p)()
 	names = ctypes.POINTER(ctypes.c_char_p)()
 	count = core.BNGetEnterpriseServerAuthenticationMethods(methods, names)
-	results = []
-	for i in range(count):
-		results.append((core.pyNativeStr(methods[i]), core.pyNativeStr(names[i])))
+	results = [(core.pyNativeStr(methods[i]), core.pyNativeStr(names[i])) for i in range(count)]
 	core.BNFreeStringList(methods, count)
 	core.BNFreeStringList(names, count)
 	return results

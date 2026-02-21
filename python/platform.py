@@ -156,9 +156,7 @@ class Platform(metaclass=_PlatformMetaClass):
 			_arch = architecture.CoreArchitecture._from_cache(core.BNGetPlatformArchitecture(_handle))
 			count = ctypes.c_ulonglong()
 			regs = core.BNGetPlatformGlobalRegisters(handle, count)
-			result = []
-			for i in range(0, count.value):
-				result.append(_arch.get_reg_name(regs[i]))
+			result = [_arch.get_reg_name(regs[i]) for i in range(0, count.value)]
 			core.BNFreeRegisterList(regs)
 			self.__dict__["global_regs"] = result
 		assert _handle is not None
@@ -238,14 +236,8 @@ class Platform(metaclass=_PlatformMetaClass):
 		try:
 			parser_py = typeparser.TypeParser(handle=parser)
 
-			arguments = []
-			for i in range(arguments_len_in):
-				arguments.append(core.pyNativeStr(arguments_in[i]))
-
-			source_files = []
-			for i in range(source_files_len_in):
-				source_files.append((core.pyNativeStr(source_file_names_in[i]), core.pyNativeStr(source_file_values_in[i])))
-
+			arguments = [core.pyNativeStr(arguments_in[i]) for i in range(arguments_len_in)]
+			source_files = [(core.pyNativeStr(source_file_names_in[i]), core.pyNativeStr(source_file_values_in[i])) for i in range(source_files_len_in)]
 			arguments, source_files = self.adjust_type_parser_input(parser_py, arguments, source_files)
 
 			arguments_len_out[0] = len(arguments)
@@ -363,9 +355,7 @@ class Platform(metaclass=_PlatformMetaClass):
 		count = ctypes.c_ulonglong()
 		platforms = core.BNGetPlatformOSList(count)
 		assert platforms is not None, "core.BNGetPlatformOSList returned None"
-		result:List[str] = []
-		for i in range(count.value):
-			result.append(str(platforms[i]))
+		result: List[str] = [str(platforms[i]) for i in range(count.value)]
 		core.BNFreePlatformOSList(platforms, count.value)
 		return result
 
@@ -382,9 +372,7 @@ class Platform(metaclass=_PlatformMetaClass):
 		else:
 			platforms = core.BNGetPlatformListByArchitecture(arch.handle, count)
 			assert platforms is not None, "core.BNGetPlatformListByArchitecture returned None"
-		result = []
-		for i in range(0, count.value):
-			result.append(CorePlatform._from_cache(core.BNNewPlatformReference(platforms[i])))
+		result = [CorePlatform._from_cache(core.BNNewPlatformReference(platforms[i])) for i in range(0, count.value)]
 		core.BNFreePlatformList(platforms, count.value)
 		return result
 
@@ -485,9 +473,7 @@ class Platform(metaclass=_PlatformMetaClass):
 		count = ctypes.c_ulonglong()
 		cc = core.BNGetPlatformCallingConventions(self.handle, count)
 		assert cc is not None, "core.BNGetPlatformCallingConventions returned None"
-		result = []
-		for i in range(0, count.value):
-			result.append(callingconvention.CallingConvention(handle=core.BNNewCallingConventionReference(cc[i])))
+		result = [callingconvention.CallingConvention(handle=core.BNNewCallingConventionReference(cc[i])) for i in range(0, count.value)]
 		core.BNFreeCallingConventionList(cc, count.value)
 		return result
 
@@ -561,9 +547,7 @@ class Platform(metaclass=_PlatformMetaClass):
 		count = ctypes.c_ulonglong(0)
 		libs = core.BNGetPlatformTypeLibraries(self.handle, count)
 		assert libs is not None, "core.BNGetPlatformTypeLibraries returned None"
-		result = []
-		for i in range(0, count.value):
-			result.append(typelibrary.TypeLibrary(core.BNNewTypeLibraryReference(libs[i])))
+		result = [typelibrary.TypeLibrary(core.BNNewTypeLibraryReference(libs[i])) for i in range(0, count.value)]
 		core.BNFreeTypeLibraryList(libs, count.value)
 		return result
 
@@ -571,9 +555,7 @@ class Platform(metaclass=_PlatformMetaClass):
 		count = ctypes.c_ulonglong(0)
 		libs = core.BNGetPlatformTypeLibrariesByName(self.handle, name, count)
 		assert libs is not None, "core.BNGetPlatformTypeLibrariesByName returned None"
-		result = []
-		for i in range(0, count.value):
-			result.append(typelibrary.TypeLibrary(core.BNNewTypeLibraryReference(libs[i])))
+		result = [typelibrary.TypeLibrary(core.BNNewTypeLibraryReference(libs[i])) for i in range(0, count.value)]
 		core.BNFreeTypeLibraryList(libs, count.value)
 		return result
 
@@ -610,9 +592,7 @@ class Platform(metaclass=_PlatformMetaClass):
 		count = ctypes.c_ulonglong()
 		platforms = core.BNGetRelatedPlatforms(self.handle, count)
 		assert platforms is not None, "core.BNGetRelatedPlatforms returned None"
-		result = []
-		for i in range(0, count.value):
-			result.append(CorePlatform._from_cache(core.BNNewPlatformReference(platforms[i])))
+		result = [CorePlatform._from_cache(core.BNNewPlatformReference(platforms[i])) for i in range(0, count.value)]
 		core.BNFreePlatformList(platforms, count.value)
 		return result
 
@@ -850,16 +830,12 @@ class CorePlatform(Platform):
 			source_files_len_out
 		)
 
-		result_arguments = []
-		for i in range(arguments_len_out.value):
-			result_arguments.append(core.pyNativeStr(arguments_out[i]))
+		result_arguments = [core.pyNativeStr(arguments_out[i]) for i in range(arguments_len_out.value)]
 
-		result_source_files = []
-		for i in range(source_files_len_out.value):
-			result_source_files.append((
+		result_source_files = [(
 				core.pyNativeStr(source_file_names_out[i]),
 				core.pyNativeStr(source_file_values_out[i]),
-			))
+			) for i in range(source_files_len_out.value)]
 
 		core.BNFreeStringList(arguments_out, arguments_len_out.value)
 		core.BNFreeStringList(source_file_names_out, source_files_len_out.value)

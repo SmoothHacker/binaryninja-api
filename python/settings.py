@@ -290,9 +290,7 @@ class Settings:
 		length = ctypes.c_ulonglong()
 		result = core.BNSettingsQueryPropertyStringList(self.handle, key, property_name, ctypes.byref(length))
 		assert result is not None, "core.BNSettingsQueryPropertyStringList returned None"
-		out_list = []
-		for i in range(length.value):
-			out_list.append(result[i].decode('utf8'))
+		out_list = [result[i].decode('utf8') for i in range(length.value)]
 		core.BNFreeStringList(result, length)
 		return out_list
 
@@ -414,9 +412,7 @@ class Settings:
 		length = ctypes.c_ulonglong()
 		result = core.BNSettingsGetStringList(self.handle, key, view_handle, func_handle, None, ctypes.byref(length))
 		assert result is not None, "core.BNSettingsGetStringList returned None"
-		out_list = []
-		for i in range(length.value):
-			out_list.append(result[i].decode('utf8'))
+		out_list = [result[i].decode('utf8') for i in range(length.value)]
 		core.BNFreeStringList(result, length)
 		return out_list
 
@@ -502,9 +498,7 @@ class Settings:
 		length = ctypes.c_ulonglong()
 		result = core.BNSettingsGetStringList(self.handle, key, view_handle, func_handle, ctypes.byref(c_scope), ctypes.byref(length))
 		assert result is not None, "core.BNSettingsGetStringList returned None"
-		out_list = []
-		for i in range(length.value):
-			out_list.append(result[i].decode('utf8'))
+		out_list = [result[i].decode('utf8') for i in range(length.value)]
 		core.BNFreeStringList(result, length)
 		return (out_list, SettingsScope(c_scope.value))
 

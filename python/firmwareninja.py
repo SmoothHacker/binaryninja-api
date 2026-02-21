@@ -315,15 +315,9 @@ class FirmwareNinjaReferenceNode:
         nodes = []
         try:
             bn_nodes = core.BNFirmwareNinjaReferenceNodeGetChildren(self._handle, count)
-            for i in range(count.value):
-                nodes.append(
-                    FirmwareNinjaReferenceNode(core.BNNewFirmwareNinjaReferenceNodeReference(bn_nodes[i]), self._view)
-                )
+            return [FirmwareNinjaReferenceNode(core.BNNewFirmwareNinjaReferenceNodeReference(bn_nodes[i]), self._view) for i in range(count.value)]
         finally:
             core.BNFreeFirmwareNinjaReferenceNodes(bn_nodes, count.value)
-
-        return nodes
-
 
 @dataclass
 class FirmwareNinjaDevice:
@@ -493,17 +487,12 @@ class FirmwareNinja:
             raise RuntimeError("BNFirmwareNinjaQueryCustomDevices")
 
         try:
-            device_list = []
-            for i in range(count):
-                device_list.append(
-                    FirmwareNinjaDevice(
+            device_list = [FirmwareNinjaDevice(
                         name=devices[i].name,
                         start=devices[i].start,
                         size=devices[i].end - devices[i].start,
                         info=devices[i].info,
-                    )
-                )
-
+                    ) for i in range(count)]
             return device_list
         finally:
             core.BNFirmwareNinjaFreeDevices(devices, count)
@@ -525,9 +514,7 @@ class FirmwareNinja:
             raise RuntimeError("BNFirmwareNinjaQueryBoardNamesForArchitecture")
 
         try:
-            board_list = []
-            for i in range(count):
-                board_list.append(boards[i].decode("utf-8"))
+            board_list = [boards[i].decode("utf-8") for i in range(count)]
 
             return board_list
         finally:
@@ -554,17 +541,12 @@ class FirmwareNinja:
             raise RuntimeError("BNFirmwareNinjaQueryBoardDevices")
 
         try:
-            device_list = []
-            for i in range(count):
-                device_list.append(
-                    FirmwareNinjaDevice(
+            device_list = [FirmwareNinjaDevice(
                         name=devices[i].name,
                         start=devices[i].start,
                         size=devices[i].end - devices[i].start,
                         info=devices[i].info,
-                    )
-                )
-
+                    ) for i in range(count)]
             return device_list
         finally:
             core.BNFirmwareNinjaFreeDevices(devices, count)
@@ -609,17 +591,12 @@ class FirmwareNinja:
             raise RuntimeError("BNFirmwareNinjaFindSectionsWithEntropy")
 
         try:
-            section_list = []
-            for i in range(count):
-                section_list.append(
-                    FirmwareNinjaSection(
+            section_list = [FirmwareNinjaSection(
                         type=FirmwareNinjaSectionType(sections[i].type),
                         start=sections[i].start,
                         size=sections[i].end - sections[i].start,
                         entropy=sections[i].entropy,
-                    )
-                )
-
+                    ) for i in range(count)]
             return section_list
         finally:
             core.BNFirmwareNinjaFreeSections(sections, count)
@@ -651,14 +628,9 @@ class FirmwareNinja:
             raise RuntimeError("BNFirmwareNinjaGetFunctionMemoryAccesses")
 
         try:
-            fma_info_list = []
-            for i in range(count):
-                fma_info_list.append(
-                    FirmwareNinjaFunctionMemoryAccesses.from_BNFirmwareNinjaFunctionMemoryAccesses(
+            fma_info_list = [FirmwareNinjaFunctionMemoryAccesses.from_BNFirmwareNinjaFunctionMemoryAccesses(
                         fma_info[i].contents, self._view
-                    )
-                )
-
+                    ) for i in range(count)]
             return fma_info_list
         finally:
             core.BNFirmwareNinjaFreeFunctionMemoryAccesses(fma_info, count)
@@ -710,13 +682,9 @@ class FirmwareNinja:
             return None
 
         try:
-            fma_info_list = []
-            for i in range(count):
-                fma_info_list.append(
-                    FirmwareNinjaFunctionMemoryAccesses.from_BNFirmwareNinjaFunctionMemoryAccesses(
+            fma_info_list = [FirmwareNinjaFunctionMemoryAccesses.from_BNFirmwareNinjaFunctionMemoryAccesses(
                         fma[i].contents, self._view
-                    )
-                )
+                    ) for i in range(count)]
 
             return fma_info_list
         finally:
@@ -750,15 +718,11 @@ class FirmwareNinja:
             raise RuntimeError("BNFirmwareNinjaGetBoardDeviceAccesses")
 
         try:
-            device_accesses_list = []
-            for i in range(count):
-                device_accesses_list.append(
-                    FirmwareNinjaDeviceAccesses(
-                        board_name=device_accesses[i].name,
-                        total=device_accesses[i].total,
-                        unique=device_accesses[i].unique,
-                    )
-                )
+            device_accesses_list = [FirmwareNinjaDeviceAccesses(
+                                        board_name=device_accesses[i].name,
+                                        total=device_accesses[i].total,
+                                        unique=device_accesses[i].unique,
+                                    ) for i in range(count)]
 
             return device_accesses_list
         finally:
@@ -830,13 +794,9 @@ class FirmwareNinja:
 
         count = ctypes.c_ulonglong(0)
         relationships = core.BNFirmwareNinjaQueryRelationships(self._handle, ctypes.byref(count))
-        relationship_list = []
-        for i in range(count.value):
-            relationship_list.append(
-                FirmwareNinjaRelationship(
+        relationship_list = [FirmwareNinjaRelationship(
                     self._view, handle=core.BNNewFirmwareNinjaRelationshipReference(relationships[i])
-                )
-            )
+                ) for i in range(count.value)]
 
         core.BNFirmwareNinjaFreeRelationships(relationships, count.value)
         return relationship_list

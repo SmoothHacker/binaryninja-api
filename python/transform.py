@@ -164,9 +164,7 @@ class Transform(metaclass=_TransformMetaClass):
 			count = ctypes.c_ulonglong()
 			params = core.BNGetTransformParameterList(self.handle, count)
 			assert params is not None, "core.BNGetTransformParameterList returned None"
-			self.parameters = []
-			for i in range(0, count.value):
-				self.parameters.append(TransformParameter(params[i].name, params[i].longName, params[i].fixedLength))
+			self.parameters = [TransformParameter(params[i].name, params[i].longName, params[i].fixedLength) for i in range(0, count.value)]
 			core.BNFreeTransformParameterList(params, count.value)
 
 	def __repr__(self):
@@ -517,9 +515,7 @@ class TransformContext:
 		transforms = core.BNTransformContextGetAvailableTransforms(self.handle, ctypes.byref(count))
 		if transforms is None:
 			return []
-		result = []
-		for i in range(count.value):
-			result.append(transforms[i].decode('utf-8'))
+		result = [transforms[i].decode('utf-8') for i in range(count.value)]
 		core.BNFreeStringList(transforms, count.value)
 		return result
 
@@ -667,9 +663,7 @@ class TransformContext:
 		children = core.BNTransformContextGetChildren(self.handle, ctypes.byref(count))
 		if children is None:
 			return []
-		result = []
-		for i in range(count.value):
-			result.append(TransformContext(core.BNNewTransformContextReference(children[i])))
+		result = [TransformContext(core.BNNewTransformContextReference(children[i])) for i in range(count.value)]
 		core.BNFreeTransformContextList(children, count.value)
 		return result
 
@@ -761,9 +755,7 @@ class TransformContext:
 		files = core.BNTransformContextGetAvailableFiles(self.handle, ctypes.byref(count))
 		if files is None:
 			return []
-		result = []
-		for i in range(count.value):
-			result.append(files[i].decode('utf-8'))
+		result = [files[i].decode('utf-8') for i in range(count.value)]
 		core.BNFreeStringList(files, count.value)
 		return result
 
@@ -808,9 +800,7 @@ class TransformContext:
 		files = core.BNTransformContextGetRequestedFiles(self.handle, ctypes.byref(count))
 		if files is None:
 			return []
-		result = []
-		for i in range(count.value):
-			result.append(files[i].decode('utf-8'))
+		result = [files[i].decode('utf-8') for i in range(count.value)]
 		core.BNFreeStringList(files, count.value)
 		return result
 
@@ -1047,9 +1037,7 @@ class TransformSession:
 		contexts = core.BNTransformSessionGetSelectedContexts(self.handle, ctypes.byref(count))
 		if contexts is None:
 			return []
-		result = []
-		for i in range(count.value):
-			result.append(TransformContext(core.BNNewTransformContextReference(contexts[i])))
+		result = [TransformContext(core.BNNewTransformContextReference(contexts[i])) for i in range(count.value)]
 		core.BNFreeTransformContextList(contexts, count.value)
 		return result
 

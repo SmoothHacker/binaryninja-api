@@ -254,12 +254,10 @@ class TypePrinter(metaclass=_TypePrinterMetaclass):
 
 	def _print_all_types(self, ctxt, names, types_, type_count, data, padding_cols, escaping, result):
 		try:
-			types_py = []
-			for i in range(type_count):
-				types_py.append((
+			types_py = [(
 					types.QualifiedName._from_core_struct(names[i]),
 					types.Type.create(handle=core.BNNewTypeReference(types_[i]))
-				))
+				) for i in range(type_count)]
 
 			result_py = self.print_all_types(
 				types_py,

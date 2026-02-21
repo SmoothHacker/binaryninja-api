@@ -367,9 +367,7 @@ class TypeContainer:
 			result = None
 		core.BNFreeTypeParserResult(result_cpp)
 
-		errors = []
-		for i in range(error_count.value):
-			errors.append(typeparser.TypeParserError._from_core_struct(errors_cpp[i]))
+		errors = [typeparser.TypeParserError._from_core_struct(errors_cpp[i]) for i in range(error_count.value)]
 		core.BNFreeTypeParserErrors(errors_cpp, error_count.value)
 
 		return result, errors
@@ -420,9 +418,7 @@ class TypeContainer:
 			result = None
 		core.BNFreeTypeParserResult(result_cpp)
 
-		errors = []
-		for i in range(error_count.value):
-			errors.append(typeparser.TypeParserError._from_core_struct(errors_cpp[i]))
+		errors = [typeparser.TypeParserError._from_core_struct(errors_cpp[i]) for i in range(error_count.value)]
 		core.BNFreeTypeParserErrors(errors_cpp, error_count.value)
 
 		return result, errors

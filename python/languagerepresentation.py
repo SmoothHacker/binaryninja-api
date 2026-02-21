@@ -373,8 +373,7 @@ class HighLevelILTokenEmitter:
 			view.handle, struct_type.handle, var.function.handle, var.expr_index, count)
 		names = []
 		if result is not None:
-			for i in range(count.value):
-				names.append(result[i].decode("utf-8"))
+			names.extend(result[i].decode("utf-8") for i in range(count.value))
 			core.BNFreeStringList(result, count.value)
 		return names
 

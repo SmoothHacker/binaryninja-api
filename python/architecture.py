@@ -935,9 +935,7 @@ class Architecture(metaclass=_ArchitectureMetaClass):
 		self.flags_required_for_semantic_flag_group: Dict[
 		    SemanticGroupName, List[FlagName]] = self.__class__.flags_required_for_semantic_flag_group
 		for group in self.__class__.flags_required_for_semantic_flag_group:
-			flags: List[FlagIndex] = []
-			for flag in self.__class__.flags_required_for_semantic_flag_group[group]:
-				flags.append(self._flags[flag])
+			flags: List[FlagIndex] = [self._flags[flag] for flag in range(self.__class__.flags_required_for_semantic_flag_group[group])]
 			self._flags_required_by_semantic_flag_group[self._semantic_flag_groups[group]] = flags
 
 		self._flag_conditions_for_semantic_flag_group = {}
@@ -955,9 +953,7 @@ class Architecture(metaclass=_ArchitectureMetaClass):
 		self._flags_written_by_flag_write_type = {}
 		self.flags_written_by_flag_write_type = self.__class__.flags_written_by_flag_write_type
 		for write_type in self.__class__.flags_written_by_flag_write_type:
-			flags = []
-			for flag in self.__class__.flags_written_by_flag_write_type[write_type]:
-				flags.append(self._flags[flag])
+			flags = [self._flags[flag] for flag in range(self.__class__.flags_written_by_flag_write_type[write_type])]
 			self._flags_written_by_flag_write_type[self._flag_write_types[write_type]] = flags
 
 		self._semantic_class_for_flag_write_type = {}
@@ -1033,10 +1029,8 @@ class Architecture(metaclass=_ArchitectureMetaClass):
 		count = ctypes.c_ulonglong()
 		regs = core.BNGetFullWidthArchitectureRegisters(self.handle, count)
 		assert regs is not None, "core.BNGetFullWidthArchitectureRegisters returned None"
-		result: List[RegisterName] = []
 		try:
-			for i in range(0, count.value):
-				result.append(RegisterName(core.BNGetArchitectureRegisterName(self.handle, regs[i])))
+			result: List[RegisterName] = [RegisterName(core.BNGetArchitectureRegisterName(self.handle, regs[i])) for i in range(0, count.value)]
 		finally:
 			core.BNFreeRegisterList(regs)
 		return result
@@ -1066,11 +1060,9 @@ class Architecture(metaclass=_ArchitectureMetaClass):
 	def type_libraries(self) -> List['typelibrary.TypeLibrary']:
 		"""Architecture type libraries"""
 		count = ctypes.c_ulonglong(0)
-		result = []
 		handles = core.BNGetArchitectureTypeLibraries(self.handle, count)
 		assert handles is not None, "core.BNGetArchitectureTypeLibraries returned None"
-		for i in range(0, count.value):
-			result.append(typelibrary.TypeLibrary(core.BNNewTypeLibraryReference(handles[i])))
+		result = [typelibrary.TypeLibrary(core.BNNewTypeLibraryReference(handles[i])) for i in range(0, count.value)]
 		core.BNFreeTypeLibraryList(handles, count.value)
 		return result
 
@@ -1396,9 +1388,7 @@ class Architecture(metaclass=_ArchitectureMetaClass):
 			else:
 				sem_class = None
 			flag_names = self.get_flags_required_for_flag_condition(cond, sem_class)
-			flags = []
-			for name in flag_names:
-				flags.append(self._flags[name])
+			flags = [self._flags[name] for name in range(flag_names)]
 			count[0] = len(flags)
 			flag_buf = (ctypes.c_uint * len(flags))()
 			for i in range(0, len(flags)):
@@ -2368,9 +2358,7 @@ class Architecture(metaclass=_ArchitectureMetaClass):
 		count = ctypes.c_ulonglong()
 		regs = core.BNGetModifiedArchitectureRegistersOnWrite(self.handle, reg, count)
 		assert regs is not None, "core.BNGetModifiedArchitectureRegistersOnWrite is not None"
-		result: List[RegisterName] = []
-		for i in range(0, count.value):
-			result.append(RegisterName(core.BNGetArchitectureRegisterName(self.handle, regs[i])))
+		result: List[RegisterName] = [RegisterName(core.BNGetArchitectureRegisterName(self.handle, regs[i])) for i in range(0, count.value)]
 		core.BNFreeRegisterList(regs)
 		return result
 
@@ -2792,9 +2780,7 @@ class CoreArchitecture(Architecture):
 			count = ctypes.c_ulonglong()
 			flags = core.BNGetArchitectureFlagsRequiredForFlagCondition(self.handle, cond, 0, count)
 			assert flags is not None, "core.BNGetArchitectureFlagsRequiredForFlagCondition returned None"
-			flag_names = []
-			for i in range(0, count.value):
-				flag_names.append(self._flags_by_index[flags[i]])
+			flag_names = [self._flags_by_index[flags[i]] for i in range(0, count.value)]
 			core.BNFreeRegisterList(flags)
 			self.flags_required_for_flag_condition[cond] = flag_names
 
@@ -2869,9 +2855,7 @@ class CoreArchitecture(Architecture):
 		count = ctypes.c_ulonglong()
 		regs = core.BNGetArchitectureGlobalRegisters(self.handle, count)
 		assert regs is not None, "core.BNGetArchitectureGlobalRegisters returned None"
-		self.global_regs: List[RegisterName] = []
-		for i in range(0, count.value):
-			self.global_regs.append(RegisterName(core.BNGetArchitectureRegisterName(self.handle, regs[i])))
+		self.global_regs: List[RegisterName] = [RegisterName(core.BNGetArchitectureRegisterName(self.handle, regs[i])) for i in range(0, count.value)]
 		core.BNFreeRegisterList(regs)
 
 		count = ctypes.c_ulonglong()
@@ -2891,9 +2875,7 @@ class CoreArchitecture(Architecture):
 		for i in range(0, count.value):
 			name = RegisterStackName(core.BNGetArchitectureRegisterStackName(self.handle, regs[i]))
 			info = core.BNGetArchitectureRegisterStackInfo(self.handle, regs[i])
-			storage: List[RegisterName] = []
-			for j in range(0, info.storageCount):
-				storage.append(RegisterName(core.BNGetArchitectureRegisterName(self.handle, info.firstStorageReg + j)))
+			storage: List[RegisterName] = [RegisterName(core.BNGetArchitectureRegisterName(self.handle, info.firstStorageReg + j)) for j in range(0, info.storageCount)]
 			top_rel: List[RegisterName] = []
 			for j in range(0, info.topRelativeCount):
 				reg_name = RegisterName(core.BNGetArchitectureRegisterName(self.handle, info.firstTopRelativeReg + j))
@@ -2928,11 +2910,7 @@ class CoreArchitecture(Architecture):
 			output_count = ctypes.c_ulonglong()
 			outputs = core.BNGetArchitectureIntrinsicOutputs(self.handle, intrinsics[i], output_count)
 			assert outputs is not None, "core.BNGetArchitectureIntrinsicOutputs returned None"
-			output_list = []
-			for j in range(output_count.value):
-				output_list.append(
-				    types.Type.create(core.BNNewTypeReference(outputs[j].type), confidence=outputs[j].confidence)
-				)
+			output_list = [types.Type.create(core.BNNewTypeReference(outputs[j].type), confidence=outputs[j].confidence) for j in range(output_count.value)]
 			core.BNFreeOutputTypeList(outputs, output_count.value)
 			if intrinsic_class is not IntrinsicClass.GeneralIntrinsicClass:
 				self._intrinsic_class_by_index[intrinsics[i]] = intrinsic_class
@@ -3344,9 +3322,7 @@ class CoreArchitecture(Architecture):
 		count = ctypes.c_ulonglong()
 		flags = core.BNGetArchitectureFlagsRequiredForFlagCondition(self.handle, cond, _sem_class, count)
 		assert flags is not None, "core.BNGetArchitectureFlagsRequiredForFlagCondition returned None"
-		flag_names = []
-		for i in range(0, count.value):
-			flag_names.append(self._flags_by_index[flags[i]])
+		flag_names = [self._flags_by_index[flags[i]] for i in range(0, count.value)]
 		core.BNFreeRegisterList(flags)
 		return flag_names
 

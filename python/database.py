@@ -58,11 +58,8 @@ class KeyValueStore:
 		value = core.BNGetKeyValueStoreKeys(self.handle, count)
 		assert value is not None
 
-		result = []
 		try:
-			for i in range(0, count.value):
-				result.append(value[i])
-			return result
+			return[value[i] for i in range(0, count.value)]
 		finally:
 			core.BNFreeStringList(value, count)
 
@@ -306,11 +303,8 @@ class Database:
 		value = core.BNGetDatabaseGlobalKeys(self.handle, count)
 		assert value is not None
 
-		result = []
 		try:
-			for i in range(0, count.value):
-				result.append(core.pyNativeStr(value[i]))
-			return result
+			return[core.pyNativeStr(value[i]) for i in range(0, count.value)]
 		finally:
 			core.BNFreeStringList(value, count)
 

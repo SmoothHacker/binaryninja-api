@@ -119,11 +119,7 @@ class DataRenderer:
 			file_metadata = filemetadata.FileMetadata(handle=core.BNGetFileForView(view))
 			view = binaryview.BinaryView(file_metadata=file_metadata, handle=core.BNNewViewReference(view))
 			type = types.Type.create(handle=core.BNNewTypeReference(type))
-			pycontext = []
-			for i in range(0, ctxCount):
-				pycontext.append(
-				    TypeContext(types.Type.create(core.BNNewTypeReference(context[i].type)), context[i].offset)
-				)
+			pycontext = [TypeContext(types.Type.create(core.BNNewTypeReference(context[i].type)), context[i].offset) for i in range(range(0, ctxCount))]
 			return self.perform_is_valid_for_data(ctxt, view, addr, type, pycontext)
 		except Exception:
 			log_error_for_exception("Unhandled Python exception in DataRenderer._is_valid_for_data")
@@ -136,11 +132,7 @@ class DataRenderer:
 			type = types.Type.create(handle=core.BNNewTypeReference(type))
 
 			prefixTokens = function.InstructionTextToken._from_core_struct(prefix, prefixCount)
-			pycontext: List[TypeContext] = []
-			for i in range(ctxCount):
-				pycontext.append(
-				    TypeContext(types.Type.create(core.BNNewTypeReference(typeCtx[i].type)), typeCtx[i].offset)
-				)
+			pycontext: List[TypeContext] = [TypeContext(types.Type.create(core.BNNewTypeReference(typeCtx[i].type)), typeCtx[i].offset) for i in range(range(ctxCount))]
 
 			result = self.perform_get_lines_for_data_with_language(
 				ctxt, view, addr, type, prefixTokens, width, pycontext, language

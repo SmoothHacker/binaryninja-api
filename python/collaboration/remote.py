@@ -176,9 +176,7 @@ class Remote:
 		count = ctypes.c_size_t()
 		if not core.BNRemoteGetAuthBackends(self._handle, backend_ids, backend_names, count):
 			raise RuntimeError(util._last_error())
-		result = []
-		for i in range(count.value):
-			result.append((core.pyNativeStr(backend_ids[i]), core.pyNativeStr(backend_names[i])))
+		result = [(core.pyNativeStr(backend_ids[i]), core.pyNativeStr(backend_names[i])) for i in range(count.value)]
 		core.BNFreeStringList(backend_ids, count.value)
 		core.BNFreeStringList(backend_names, count.value)
 		return result
@@ -331,9 +329,7 @@ class Remote:
 		value = core.BNRemoteGetProjects(self._handle, count)
 		if value is None:
 			raise RuntimeError(util._last_error())
-		result = []
-		for i in range(count.value):
-			result.append(project.RemoteProject(value[i]))
+		result = [project.RemoteProject(value[i]) for i in range(count.value)]
 		return result
 
 	def get_project_by_id(self, id: str) -> Optional['project.RemoteProject']:
@@ -443,9 +439,7 @@ class Remote:
 		value = core.BNRemoteGetGroups(self._handle, count)
 		if value is None:
 			raise RuntimeError(util._last_error())
-		result = []
-		for i in range(count.value):
-			result.append(group.Group(value[i]))
+		result = [group.Group(value[i]) for i in range(count.value)]
 		return result
 
 	def get_group_by_id(self, id: int) -> Optional['group.Group']:
@@ -501,9 +495,7 @@ class Remote:
 		group_names = ctypes.POINTER(ctypes.c_char_p)()
 		if not core.BNRemoteSearchGroups(self._handle, prefix, group_ids, group_names, count):
 			raise RuntimeError(util._last_error())
-		result = []
-		for i in range(count.value):
-			result.append((group_ids[i], core.pyNativeStr(group_names[i])))
+		result = [(group_ids[i], core.pyNativeStr(group_names[i])) for i in range(count.value)]
 		core.BNCollaborationFreeIdList(group_ids, count.value)
 		core.BNFreeStringList(group_names, count.value)
 		return result
@@ -590,9 +582,7 @@ class Remote:
 		value = core.BNRemoteGetUsers(self._handle, count)
 		if value is None:
 			raise RuntimeError(util._last_error())
-		result = []
-		for i in range(count.value):
-			result.append(user.User(value[i]))
+		result = [user.User(value[i]) for i in range(count.value)]
 		return result
 
 	def get_user_by_id(self, id: str) -> Optional['user.User']:
@@ -665,9 +655,7 @@ class Remote:
 		usernames = ctypes.POINTER(ctypes.c_char_p)()
 		if not core.BNRemoteSearchUsers(self._handle, prefix, user_ids, usernames, count):
 			raise RuntimeError(util._last_error())
-		result = []
-		for i in range(count.value):
-			result.append((core.pyNativeStr(user_ids[i]), core.pyNativeStr(usernames[i])))
+		result = [(core.pyNativeStr(user_ids[i]), core.pyNativeStr(usernames[i])) for i in range(count.value)]
 		core.BNFreeStringList(user_ids, count.value)
 		core.BNFreeStringList(usernames, count.value)
 		return result

@@ -575,9 +575,7 @@ class Function:
 		count = ctypes.c_ulonglong(0)
 		range_list = core.BNGetFunctionAddressRanges(self.handle, count)
 		assert range_list is not None, "core.BNGetFunctionAddressRanges returned None"
-		result = []
-		for i in range(0, count.value):
-			result.append(variable.AddressRange(range_list[i].start, range_list[i].end))
+		result = [variable.AddressRange(range_list[i].start, range_list[i].end) for i in range(0, count.value)]
 		core.BNFreeAddressRanges(range_list)
 		return result
 
@@ -1263,15 +1261,11 @@ class Function:
 		count = ctypes.c_ulonglong()
 		branches = core.BNGetIndirectBranches(self.handle, count)
 		assert branches is not None, "core.BNGetIndirectBranches returned None"
-		result = []
-		for i in range(0, count.value):
-			result.append(
-			    variable.IndirectBranchInfo(
+		result = [variable.IndirectBranchInfo(
 			        architecture.CoreArchitecture._from_cache(branches[i].sourceArch), branches[i].sourceAddr,
 			        architecture.CoreArchitecture._from_cache(branches[i].destArch), branches[i].destAddr,
 			        branches[i].autoDefined
-			    )
-			)
+			    ) for i in range(0, count.value)]
 		core.BNFreeIndirectBranchList(branches)
 		return result
 
@@ -1282,12 +1276,10 @@ class Function:
 		addresses = core.BNGetUnresolvedIndirectBranches(self.handle, count)
 		try:
 			assert addresses is not None, "core.BNGetUnresolvedIndirectBranches returned None"
-			result = []
-			for i in range(count.value):
-				result.append((
+			result = [(
 					architecture.CoreArchitecture._from_cache(addresses[i].arch),
 					addresses[i].address
-				))
+				) for i in range(count.value)]
 			return result
 		finally:
 			if addresses is not None:
@@ -1359,9 +1351,7 @@ class Function:
 		result = core.BNGetFunctionReturnRegisters(self.handle)
 		assert result is not None, "core.BNGetFunctionReturnRegisters returned None"
 		try:
-			reg_set = []
-			for i in range(result.count):
-				reg_set.append(self.arch.get_reg_name(result.regs[i]))
+			reg_set = [self.arch.get_reg_name(result.regs[i]) for i in range(result.count)]
 			return types.RegisterSet(reg_set, confidence=result.confidence)
 		finally:
 			core.BNFreeRegisterSet(result)
@@ -1402,9 +1392,7 @@ class Function:
 	def parameter_vars(self) -> 'variable.ParameterVariables':
 		"""List of variables for the incoming function parameters"""
 		result = core.BNGetFunctionParameterVariables(self.handle)
-		var_list = []
-		for i in range(0, result.count):
-			var_list.append(variable.Variable.from_BNVariable(self, result.vars[i]))
+		var_list = [variable.Variable.from_BNVariable(self, result.vars[i]) for i in range(0, result.count)]
 		confidence = result.confidence
 		core.BNFreeParameterVariables(result)
 		return variable.ParameterVariables(var_list, confidence, self)
@@ -1505,9 +1493,7 @@ class Function:
 		"""Registers that are modified by this function"""
 		result = core.BNGetFunctionClobberedRegisters(self.handle)
 
-		reg_set = []
-		for i in range(0, result.count):
-			reg_set.append(self.arch.get_reg_name(result.regs[i]))
+		reg_set = [self.arch.get_reg_name(result.regs[i]) for i in range(0, result.count)]
 		regs = types.RegisterSet(reg_set, confidence=result.confidence)
 		core.BNFreeRegisterSet(result)
 		return regs
@@ -1629,9 +1615,7 @@ class Function:
 		result = {}
 		for i in range(count.value):
 			target = Variable.from_BNVariable(self, data[i].target)
-			sources = []
-			for j in range(data[i].sourceCount):
-				sources.append(Variable.from_BNVariable(self, data[i].sources[j]))
+			sources = [Variable.from_BNVariable(self, data[i].sources[j]) for j in range(data[i].sourceCount)]
 			result[target] = sources
 
 		core.BNFreeMergedVariableList(data, count.value)
@@ -1646,9 +1630,7 @@ class Function:
 		"""
 		count = ctypes.c_ulonglong()
 		data = core.BNGetSplitVariables(self.handle, count)
-		result = []
-		for i in range(count.value):
-			result.append(Variable.from_BNVariable(self, data[i]))
+		result = [Variable.from_BNVariable(self, data[i]) for i in range(count.value)]
 		core.BNFreeVariableList(data)
 		return result
 
@@ -2046,9 +2028,7 @@ class Function:
 		count = ctypes.c_ulonglong()
 		regs = core.BNGetRegistersReadByInstruction(self.handle, arch.handle, addr, count)
 		assert regs is not None, "core.BNGetRegistersReadByInstruction returned None"
-		result = []
-		for i in range(0, count.value):
-			result.append(arch.get_reg_name(regs[i]))
+		result = [arch.get_reg_name(regs[i]) for i in range(0, count.value)]
 		core.BNFreeRegisterList(regs)
 		return result
 
@@ -2059,9 +2039,7 @@ class Function:
 		count = ctypes.c_ulonglong()
 		regs = core.BNGetRegistersWrittenByInstruction(self.handle, arch.handle, addr, count)
 		assert regs is not None, "core.BNGetRegistersWrittenByInstruction returned None"
-		result = []
-		for i in range(0, count.value):
-			result.append(arch.get_reg_name(regs[i]))
+		result = [arch.get_reg_name(regs[i]) for i in range(0, count.value)]
 		core.BNFreeRegisterList(regs)
 		return result
 
@@ -2146,11 +2124,7 @@ class Function:
 		count = ctypes.c_ulonglong()
 		refs = core.BNGetConstantsReferencedByInstruction(self.handle, arch.handle, addr, count)
 		assert refs is not None, "core.BNGetConstantsReferencedByInstruction returned None"
-		result = []
-		for i in range(0, count.value):
-			result.append(
-			    variable.ConstantReference(refs[i].value, refs[i].size, refs[i].pointer, refs[i].intermediate)
-			)
+		result = [variable.ConstantReference(refs[i].value, refs[i].size, refs[i].pointer, refs[i].intermediate) for i in range(0, count.value)]
 		core.BNFreeConstantReferenceList(refs)
 		return result
 
@@ -2161,11 +2135,7 @@ class Function:
 		count = ctypes.c_ulonglong()
 		refs = core.BNGetConstantsReferencedByInstructionIfAvailable(self.handle, arch.handle, addr, count)
 		assert refs is not None, "core.BNGetConstantsReferencedByInstructionIfAvailable returned None"
-		result = []
-		for i in range(0, count.value):
-			result.append(
-			    variable.ConstantReference(refs[i].value, refs[i].size, refs[i].pointer, refs[i].intermediate)
-			)
+		result = [variable.ConstantReference(refs[i].value, refs[i].size, refs[i].pointer, refs[i].intermediate) for i in range(0, count.value)]
 		core.BNFreeConstantReferenceList(refs)
 		return result
 
@@ -2176,9 +2146,7 @@ class Function:
 		count = ctypes.c_ulonglong()
 		instrs = core.BNGetLiftedILFlagUsesForDefinition(self.handle, i, flag, count)
 		assert instrs is not None, "core.BNGetLiftedILFlagUsesForDefinition returned None"
-		result = []
-		for j in range(0, count.value):
-			result.append(instrs[lowlevelil.InstructionIndex(j)])
+		result = [instrs[lowlevelil.InstructionIndex(j)] for j in range(0, count.value)]
 		core.BNFreeILInstructionList(instrs)
 		return result
 
@@ -2188,9 +2156,7 @@ class Function:
 		count = ctypes.c_ulonglong()
 		instrs = core.BNGetLiftedILFlagDefinitionsForUse(self.handle, i, flag, count)
 		assert instrs is not None, "core.BNGetLiftedILFlagDefinitionsForUse returned None"
-		result = []
-		for j in range(0, count.value):
-			result.append(instrs[lowlevelil.InstructionIndex(j)])
+		result = [instrs[lowlevelil.InstructionIndex(j)] for j in range(0, count.value)]
 		core.BNFreeILInstructionList(instrs)
 		return result
 
@@ -2199,9 +2165,7 @@ class Function:
 		count = ctypes.c_ulonglong()
 		flags = core.BNGetFlagsReadByLiftedILInstruction(self.handle, i, count)
 		assert flags is not None, "core.BNGetFlagsReadByLiftedILInstruction returned None"
-		result = []
-		for j in range(0, count.value):
-			result.append(self.arch._flags_by_index[flags[j]])
+		result = [self.arch._flags_by_index[flags[j]] for j in range(0, count.value)]
 		core.BNFreeRegisterList(flags)
 		return result
 
@@ -2210,9 +2174,7 @@ class Function:
 		count = ctypes.c_ulonglong()
 		flags = core.BNGetFlagsWrittenByLiftedILInstruction(self.handle, i, count)
 		assert flags is not None, "core.BNGetFlagsWrittenByLiftedILInstruction returned None"
-		result = []
-		for j in range(0, count.value):
-			result.append(self.arch._flags_by_index[flags[j]])
+		result = [self.arch._flags_by_index[flags[j]] for j in range(0, count.value)]
 		core.BNFreeRegisterList(flags)
 		return result
 
@@ -2372,12 +2334,10 @@ class Function:
 		addresses = core.BNGetGuidedSourceBlocks(self.handle, count)
 		try:
 			assert addresses is not None, "core.BNGetGuidedSourceBlocks returned None"
-			result = []
-			for i in range(count.value):
-				result.append((
+			result = [(
 					architecture.CoreArchitecture._from_cache(addresses[i].arch),
 					addresses[i].address
-				))
+				) for i in range(count.value)]
 			return result
 		finally:
 			if addresses is not None:
@@ -2402,15 +2362,11 @@ class Function:
 		branches = core.BNGetIndirectBranchesAt(self.handle, arch.handle, addr, count)
 		try:
 			assert branches is not None, "core.BNGetIndirectBranchesAt returned None"
-			result = []
-			for i in range(count.value):
-				result.append(
-				    variable.IndirectBranchInfo(
+			result = [variable.IndirectBranchInfo(
 				        architecture.CoreArchitecture._from_cache(branches[i].sourceArch), branches[i].sourceAddr,
 				        architecture.CoreArchitecture._from_cache(branches[i].destArch), branches[i].destAddr,
 				        branches[i].autoDefined
-				    )
-				)
+				    ) for i in range(count.value)]
 			return result
 		finally:
 			core.BNFreeIndirectBranchList(branches)
@@ -2423,9 +2379,7 @@ class Function:
 		lines = core.BNGetFunctionBlockAnnotations(self.handle, arch.handle, addr, count)
 		try:
 			assert lines is not None, "core.BNGetFunctionBlockAnnotations returned None"
-			result = []
-			for i in range(count.value):
-				result.append(InstructionTextToken._from_core_struct(lines[i].tokens, lines[i].count))
+			result = [InstructionTextToken._from_core_struct(lines[i].tokens, lines[i].count) for i in range(count.value)]
 			return result
 		finally:
 			core.BNFreeInstructionTextLines(lines, count.value)
@@ -3287,10 +3241,7 @@ class Function:
 		:return: List of Functions that call this function
 		:rtype: list(Function)
 		"""
-		functions = []
-		for ref in self.caller_sites:
-			if ref.function is not None:
-				functions.append(ref.function)
+		functions = [ref.function for ref in self.caller_sites if ref.function is not None]
 		return functions
 
 	@property
@@ -3890,9 +3841,7 @@ class DisassemblyTextLine:
 				il_instr = None
 		tokens = InstructionTextToken._from_core_struct(struct.tokens, struct.count)
 
-		tags = []
-		for i in range(struct.tagCount):
-			tags.append(binaryview.Tag(handle=core.BNNewTagReference(struct.tags[i])))
+		tags = [binaryview.Tag(handle=core.BNNewTagReference(struct.tags[i])) for i in range(struct.tagCount)]
 
 		type_info = None
 		if struct.typeInfo.hasTypeInfo:

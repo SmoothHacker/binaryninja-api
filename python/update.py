@@ -123,9 +123,7 @@ class UpdateChannel(metaclass=_UpdateChannelMetaClass):
 			error_str = errors.value
 			core.free_string(errors)
 			raise IOError(error_str)
-		result = []
-		for i in range(0, count.value):
-			result.append(UpdateVersion(self, versions[i].version, versions[i].notes, versions[i].time))
+		result = [UpdateVersion(self, versions[i].version, versions[i].notes, versions[i].time) for i in range(0, count.value)]
 		core.BNFreeUpdateChannelVersionList(versions, count.value)
 		return result
 

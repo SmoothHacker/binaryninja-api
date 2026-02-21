@@ -188,14 +188,10 @@ class Component:
 
         count = ctypes.c_ulonglong(0)
         bn_components = core.BNComponentGetContainedComponents(self.handle, count)
-        components = []
         try:
-            for i in range(count.value):
-                components.append(Component(core.BNNewComponentReference(bn_components[i])))
+            return [Component(core.BNNewComponentReference(bn_components[i])) for i in range(count.value)]
         finally:
             core.BNFreeComponents(bn_components, count.value)
-
-        return components
 
     @property
     def function_list(self) -> List['function.Function']:
@@ -317,7 +313,6 @@ class Component:
         :param recursive: Optional; Get all Types referenced by this component and sub-components.
         :return: List of Types
         """
-        _types = []
         count = ctypes.c_ulonglong(0)
 
         if recursive:
@@ -326,9 +321,6 @@ class Component:
             bn_types = core.BNComponentGetReferencedTypes(self.handle, count)
 
         try:
-            for i in range(count.value):
-                _types.append(types.Type.create(core.BNNewTypeReference(bn_types[i])))
+            return [types.Type.create(core.BNNewTypeReference(bn_types[i])) for i in range(count.value)]
         finally:
             core.BNComponentFreeReferencedTypes(bn_types, count.value)
-
-        return _types

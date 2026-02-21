@@ -119,9 +119,7 @@ class Extension:
 		platforms = core.BNPluginGetApis(self.handle, count)
 		assert platforms is not None, "core.BNPluginGetApis returned None"
 		try:
-			for i in range(count.value):
-				result.append(platforms[i].decode("utf-8"))
-			return result
+			return [platforms[i].decode("utf-8") for i in range(count.value)]
 		finally:
 			core.BNFreePluginPlatforms(platforms, count.value)
 
@@ -175,9 +173,7 @@ class Extension:
 		plugintypes = core.BNPluginGetPluginTypes(self.handle, count)
 		assert plugintypes is not None, "core.BNPluginGetPluginTypes returned None"
 		try:
-			for i in range(count.value):
-				result.append(PluginType(plugintypes[i]))
-			return result
+			return [PluginType(plugintypes[i]) for i in range(count.value)]
 		finally:
 			core.BNFreePluginTypes(plugintypes)
 
@@ -223,9 +219,7 @@ class Extension:
 		platforms = core.BNPluginGetPlatforms(self.handle, count)
 		assert platforms is not None, "core.BNPluginGetPlatforms returned None"
 		try:
-			for i in range(count.value):
-				result.append(platforms[i].decode("utf-8"))
-			return result
+			return [platforms[i].decode("utf-8") for i in range(count.value)]
 		finally:
 			core.BNFreePluginPlatforms(platforms, count.value)
 

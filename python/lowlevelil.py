@@ -663,9 +663,7 @@ class LowLevelILInstruction(BaseILInstruction):
 
 	@property
 	def mlils(self) -> List['mediumlevelil.MediumLevelILInstruction']:
-		result = []
-		for expr in self.function.get_medium_level_il_expr_indexes(self.expr_index):
-			result.append(mediumlevelil.MediumLevelILInstruction.create(self.function.medium_level_il, expr))
+		result = [mediumlevelil.MediumLevelILInstruction.create(self.function.medium_level_il, expr) for expr in self.function.get_medium_level_il_expr_indexes(self.expr_index)]
 		return result
 
 	@property
@@ -1104,11 +1102,8 @@ class LowLevelILInstruction(BaseILInstruction):
 		count = ctypes.c_ulonglong()
 		operand_list = core.BNLowLevelILGetOperandList(self.function.handle, self.expr_index, operand_index, count)
 		assert operand_list is not None, "core.BNLowLevelILGetOperandList returned None"
-		result: List[int] = []
 		try:
-			for j in range(count.value):
-				result.append(operand_list[j])
-			return result
+			return [operand_list[j] for j in range(count.value)]
 		finally:
 			core.BNLowLevelILFreeOperandList(operand_list)
 
@@ -1116,10 +1111,8 @@ class LowLevelILInstruction(BaseILInstruction):
 		count = ctypes.c_ulonglong()
 		operand_list = core.BNLowLevelILGetOperandList(self.function.handle, self.expr_index, operand_index, count)
 		assert operand_list is not None, "core.BNLowLevelILGetOperandList returned None"
-		result = []
 		try:
-			for j in range(count.value):
-				result.append(LowLevelILInstruction.create(self.function, operand_list[j], None))
+			result = [LowLevelILInstruction.create(self.function, operand_list[j], None) for j in range(count.value)]
 			return result
 		finally:
 			core.BNLowLevelILFreeOperandList(operand_list)
@@ -3577,10 +3570,8 @@ class LowLevelILFunction:
 		count = ctypes.c_ulonglong()
 		registers = core.BNGetLowLevelRegisters(self.handle, count)
 		assert registers is not None, "core.BNGetLowLevelRegisters returned None"
-		result = []
 		try:
-			for var_i in range(count.value):
-				result.append(ILRegister(self.arch, registers[var_i]))
+			result = [ILRegister(self.arch, registers[var_i]) for var_i in range(count.value)]
 			return result
 		finally:
 			core.BNFreeLLILVariablesList(registers)
@@ -3607,10 +3598,8 @@ class LowLevelILFunction:
 		count = ctypes.c_ulonglong()
 		registerStacks = core.BNGetLowLevelRegisterStacks(self.handle, count)
 		assert registerStacks is not None, "core.BNGetLowLevelRegisterStacks returned None"
-		result = []
 		try:
-			for var_i in range(count.value):
-				result.append(ILRegisterStack(self.arch, registerStacks[var_i]))
+			result = [ILRegisterStack(self.arch, registerStacks[var_i]) for var_i in range(count.value)]
 			return result
 		finally:
 			core.BNFreeLLILVariablesList(registerStacks)
@@ -3625,10 +3614,8 @@ class LowLevelILFunction:
 		count = ctypes.c_ulonglong()
 		flags = core.BNGetLowLevelFlags(self.handle, count)
 		assert flags is not None, "core.BNGetLowLevelFlags returned None"
-		result = []
 		try:
-			for var_i in range(count.value):
-				result.append(ILFlag(self.arch, flags[var_i]))
+			result = [ILFlag(self.arch, flags[var_i]) for var_i in range(count.value)]
 			return result
 		finally:
 			core.BNFreeLLILVariablesList(flags)
@@ -3639,10 +3626,8 @@ class LowLevelILFunction:
 		register_count = ctypes.c_ulonglong()
 		registers = core.BNGetLowLevelSSARegistersWithoutVersions(self.handle, register_count)
 		assert registers is not None, "core.BNGetLowLevelRegisters returned None"
-		result = []
 		try:
-			for var_i in range(register_count.value):
-				result.append(SSARegister(ILRegister(self.arch, registers[var_i]), 0))
+			result = [SSARegister(ILRegister(self.arch, registers[var_i]), 0) for var_i in range(register_count.value)]
 		finally:
 			core.BNFreeLLILVariablesList(registers)
 
@@ -3654,10 +3639,8 @@ class LowLevelILFunction:
 		register_stack_count = ctypes.c_ulonglong()
 		register_stacks = core.BNGetLowLevelSSARegisterStacksWithoutVersions(self.handle, register_stack_count)
 		assert register_stacks is not None, "core.BNGetLowLevelRegisterStacks returned None"
-		result = []
 		try:
-			for var_i in range(register_stack_count.value):
-				result.append(SSARegisterStack(ILRegisterStack(self.arch, register_stacks[var_i]), 0))
+			result = [SSARegisterStack(ILRegisterStack(self.arch, register_stacks[var_i]), 0) for var_i in range(register_stack_count.value)]
 		finally:
 			core.BNFreeLLILVariablesList(register_stacks)
 
@@ -3669,10 +3652,8 @@ class LowLevelILFunction:
 		flag_count = ctypes.c_ulonglong()
 		flags = core.BNGetLowLevelSSAFlagsWithoutVersions(self.handle, flag_count)
 		assert flags is not None, "core.BNGetLowLevelFlags returned None"
-		result = []
 		try:
-			for var_i in range(flag_count.value):
-				result.append(SSAFlag(ILFlag(self.arch, flags[var_i]), 0))
+			result = [SSAFlag(ILFlag(self.arch, flags[var_i]), 0) for var_i in range(flag_count.value)]
 		finally:
 			core.BNFreeLLILVariablesList(flags)
 
@@ -3699,8 +3680,7 @@ class LowLevelILFunction:
 				versions = core.BNGetLowLevelRegisterSSAVersions(self.handle, registers[var_i], version_count)
 				assert versions is not None, "core.BNGetLowLevelRegisterSSAVersions returned None"
 				try:
-					for version_i in range(version_count.value):
-						result.append(SSARegister(ILRegister(self.arch, registers[var_i]), versions[version_i]))
+					result.extend(SSARegister(ILRegister(self.arch, registers[var_i]), versions[version_i]) for version_i in range(version_count.value))
 				finally:
 					core.BNFreeLLILVariableVersionList(versions)
 
@@ -3723,10 +3703,7 @@ class LowLevelILFunction:
 				)
 				assert versions is not None, "core.BNGetLowLevelRegisterStackSSAVersions returned None"
 				try:
-					for version_i in range(version_count.value):
-						result.append(
-						    SSARegisterStack(ILRegisterStack(self.arch, register_stacks[var_i]), versions[version_i])
-						)
+					result.extend(SSARegisterStack(ILRegisterStack(self.arch, register_stacks[var_i]), versions[version_i]) for version_i in range(version_count.value))
 				finally:
 					core.BNFreeLLILVariableVersionList(versions)
 		finally:
@@ -3746,8 +3723,7 @@ class LowLevelILFunction:
 				versions = core.BNGetLowLevelFlagSSAVersions(self.handle, flags[var_i], version_count)
 				assert versions is not None, "core.BNGetLowLevelFlagSSAVersions returned None"
 				try:
-					for version_i in range(version_count.value):
-						result.append(SSAFlag(ILFlag(self.arch, flags[var_i]), versions[version_i]))
+					result.extend(SSAFlag(ILFlag(self.arch, flags[var_i]), versions[version_i]) for version_i in range(version_count.value))
 				finally:
 					core.BNFreeLLILVariableVersionList(versions)
 		finally:
@@ -3760,10 +3736,8 @@ class LowLevelILFunction:
 		count = ctypes.c_ulonglong()
 		memory_versions = core.BNGetLowLevelMemoryVersions(self.handle, count)
 		assert memory_versions is not None, "core.BNGetLowLevelMemoryVersions returned None"
-		result = []
 		try:
-			for version_i in range(count.value):
-				result.append(memory_versions[version_i])
+			result = [memory_versions[version_i] for version_i in range(count.value)]
 			return result
 		finally:
 			core.BNFreeLLILVariableVersionList(memory_versions)
@@ -3820,9 +3794,7 @@ class LowLevelILFunction:
 		instrs = core.BNLowLevelILGetInstructionsAt(self.handle, arch.handle, addr, count)
 		assert instrs is not None, "core.BNLowLevelILGetInstructionsAt returned None"
 		try:
-			result = []
-			for i in range(0, count.value):
-				result.append(instrs[i])
+			result = [instrs[i] for i in range(0, count.value)]
 			return result
 		finally:
 			core.BNFreeILInstructionList(instrs)
@@ -3832,9 +3804,7 @@ class LowLevelILFunction:
 		exits = core.BNLowLevelILGetExitsForInstruction(self.handle, idx, count)
 		assert exits is not None, "core.BNLowLevelILGetExitsForInstruction returned None"
 		try:
-			result = []
-			for i in range(0, count.value):
-				result.append(exits[i])
+			result = [exits[i] for i in range(0, count.value)]
 			return result
 		finally:
 			core.BNFreeILInstructionList(exits)
@@ -4176,9 +4146,7 @@ class LowLevelILFunction:
 			return dest.expr(expr.operation, sub_expr_handler(expr.left), sub_expr_handler(expr.right), sub_expr_handler(expr.carry), size=expr.size, flags=expr.flags, source_location=loc)
 		if expr.operation == LowLevelILOperation.LLIL_INTRINSIC:
 			expr: LowLevelILIntrinsic
-			params = []
-			for param in expr.params:
-				params.append(sub_expr_handler(param))
+			params = [sub_expr_handler(param) for param in expr.params]
 			return dest.intrinsic(expr.output, expr.intrinsic, params, expr.flags, loc)
 
 		raise NotImplementedError(f"unknown expr operation {expr.operation} in copy_expr_to")
@@ -5580,9 +5548,7 @@ class LowLevelILFunction:
 				output_list.append((1 << 32) | output.index)
 			else:
 				output_list.append(output)
-		param_list = []
-		for param in params:
-			param_list.append(param)
+		param_list = [param for param in params]
 		call_param = self.expr(LowLevelILOperation.LLIL_CALL_PARAM, len(params), self.add_operand_list(param_list))
 		return self.expr(
 		    LowLevelILOperation.LLIL_INTRINSIC, len(outputs), self.add_operand_list(output_list),
@@ -6242,9 +6208,7 @@ class LowLevelILFunction:
 		count = ctypes.c_ulonglong()
 		instrs = core.BNGetLowLevelILSSARegisterUses(self.handle, reg, reg_ssa.version, count)
 		assert instrs is not None, "core.BNGetLowLevelILSSARegisterUses returned None"
-		result = []
-		for i in range(0, count.value):
-			result.append(self[instrs[i]])
+		result = [self[instrs[i]] for i in range(0, count.value)]
 		core.BNFreeILInstructionList(instrs)
 		return result
 
@@ -6253,9 +6217,7 @@ class LowLevelILFunction:
 		count = ctypes.c_ulonglong()
 		instrs = core.BNGetLowLevelILSSAFlagUses(self.handle, flag, flag_ssa.version, count)
 		assert instrs is not None, "core.BNGetLowLevelILSSAFlagUses returned None"
-		result = []
-		for i in range(0, count.value):
-			result.append(self[instrs[i]])
+		result = [self[instrs[i]] for i in range(0, count.value)]
 		core.BNFreeILInstructionList(instrs)
 		return result
 
@@ -6263,9 +6225,7 @@ class LowLevelILFunction:
 		count = ctypes.c_ulonglong()
 		instrs = core.BNGetLowLevelILSSAMemoryUses(self.handle, index, count)
 		assert instrs is not None, "core.BNGetLowLevelILSSAMemoryUses returned None"
-		result = []
-		for i in range(0, count.value):
-			result.append(self[instrs[i]])
+		result = [self[instrs[i]] for i in range(0, count.value)]
 		core.BNFreeILInstructionList(instrs)
 		return result
 
@@ -6314,9 +6274,7 @@ class LowLevelILFunction:
 		count = ctypes.c_ulonglong()
 		exprs = core.BNGetMediumLevelILExprIndexes(self.handle, expr, count)
 		assert exprs is not None, "core.BNGetMediumLevelILExprIndexes returned None"
-		result = []
-		for i in range(0, count.value):
-			result.append(exprs[i])
+		result = [exprs[i] for i in range(0, count.value)]
 		core.BNFreeILInstructionList(exprs)
 		return result
 

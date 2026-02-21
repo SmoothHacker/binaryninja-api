@@ -727,9 +727,7 @@ class HighLevelILInstruction(BaseILInstruction):
 		assert operand_list is not None, "core.BNHighLevelILGetOperandList returned None"
 		value: List[int] = []
 		try:
-			for j in range(count.value):
-				value.append(operand_list[j])
-			return value
+			return [operand_list[j] for j in range(count.value)]
 		finally:
 			core.BNHighLevelILFreeOperandList(operand_list)
 
@@ -739,9 +737,7 @@ class HighLevelILInstruction(BaseILInstruction):
 		assert operand_list is not None, "core.BNHighLevelILGetOperandList returned None"
 		value: List[HighLevelILInstruction] = []
 		try:
-			for j in range(count.value):
-				value.append(HighLevelILInstruction.create(self.function, operand_list[j], self.as_ast))
-			return value
+			return [HighLevelILInstruction.create(self.function, operand_list[j], self.as_ast) for j in range(count.value)]
 		finally:
 			core.BNHighLevelILFreeOperandList(operand_list)
 
@@ -2836,9 +2832,7 @@ class HighLevelILFunction:
 		var_data = ssa_var.var.to_BNVariable()
 		instrs = core.BNGetHighLevelILSSAVarUses(self.handle, var_data, ssa_var.version, count)
 		assert instrs is not None, "core.BNGetHighLevelILSSAVarUses returned None"
-		result = []
-		for i in range(0, count.value):
-			result.append(HighLevelILInstruction.create(self, instrs[i]))
+		result = [HighLevelILInstruction.create(self, instrs[i]) for i in range(0, count.value)]
 		core.BNFreeILInstructionList(instrs)
 		return result
 
@@ -2846,9 +2840,7 @@ class HighLevelILFunction:
 		count = ctypes.c_ulonglong()
 		instrs = core.BNGetHighLevelILSSAMemoryUses(self.handle, version, count)
 		assert instrs is not None, "core.BNGetHighLevelILSSAMemoryUses returned None"
-		result = []
-		for i in range(0, count.value):
-			result.append(HighLevelILInstruction.create(self, instrs[i]))
+		result = [HighLevelILInstruction.create(self, instrs[i]) for i in range(0, count.value)]
 		core.BNFreeILInstructionList(instrs)
 		return result
 
@@ -2880,9 +2872,7 @@ class HighLevelILFunction:
 		var_data = var.to_BNVariable()
 		instrs = core.BNGetHighLevelILVariableDefinitions(self.handle, var_data, count)
 		assert instrs is not None, "core.BNGetHighLevelILVariableDefinitions returned None"
-		result = []
-		for i in range(0, count.value):
-			result.append(HighLevelILInstruction.create(self, instrs[i]))
+		result = [HighLevelILInstruction.create(self, instrs[i]) for i in range(0, count.value)]
 		core.BNFreeILInstructionList(instrs)
 		return result
 
@@ -2891,9 +2881,7 @@ class HighLevelILFunction:
 		var_data = var.to_BNVariable()
 		instrs = core.BNGetHighLevelILVariableUses(self.handle, var_data, count)
 		assert instrs is not None, "core.BNGetHighLevelILVariableUses returned None"
-		result = []
-		for i in range(0, count.value):
-			result.append(HighLevelILInstruction.create(self, instrs[i]))
+		result = [HighLevelILInstruction.create(self, instrs[i]) for i in range(0, count.value)]
 		core.BNFreeILInstructionList(instrs)
 		return result
 
@@ -4661,13 +4649,9 @@ class HighLevelILFunction:
 			core_variables = core.BNGetHighLevelILVariables(self.handle, count)
 			assert core_variables is not None, "core.BNGetHighLevelILVariables returned None"
 			try:
-				result = []
-				for var_i in range(count.value):
-					result.append(
-					    variable.Variable(
+				result = [variable.Variable(
 					        self, core_variables[var_i].type, core_variables[var_i].index, core_variables[var_i].storage
-					    )
-					)
+					    ) for var_i in range(count.value)]
 				return result
 			finally:
 				core.BNFreeVariableList(core_variables)
@@ -4686,13 +4670,7 @@ class HighLevelILFunction:
 			core_variables = core.BNGetHighLevelILAliasedVariables(self.handle, count)
 			assert core_variables is not None, "core.BNGetHighLevelILAliasedVariables returned None"
 			try:
-				result = []
-				for var_i in range(count.value):
-					result.append(
-					    variable.Variable(
-					        self, core_variables[var_i].type, core_variables[var_i].index, core_variables[var_i].storage
-					    )
-					)
+				result = [variable.Variable(self, core_variables[var_i].type, core_variables[var_i].index, core_variables[var_i].storage) for var_i in range(count.value)]
 				return result
 			finally:
 				core.BNFreeVariableList(core_variables)
@@ -4717,15 +4695,12 @@ class HighLevelILFunction:
 					)
 					assert versions is not None, "core.BNGetHighLevelILVariableSSAVersions returned None"
 					try:
-						for version_i in range(version_count.value):
-							result.append(
-							    mediumlevelil.SSAVariable(
+						result.extend(mediumlevelil.SSAVariable(
 							        variable.Variable(
 							            self, core_variables[var_i].type, core_variables[var_i].index,
 							            core_variables[var_i].storage
 							        ), versions[version_i]
-							    )
-							)
+							    ) for version_i in range(version_count.value))
 					finally:
 						core.BNFreeILInstructionList(versions)
 				return result
@@ -4762,9 +4737,7 @@ class HighLevelILFunction:
 		count = ctypes.c_ulonglong()
 		exprs = core.BNGetMediumLevelILExprIndexesFromHighLevelIL(self.handle, expr, count)
 		assert exprs is not None, "core.BNGetMediumLevelILExprIndexesFromHighLevelIL returned None"
-		result = []
-		for i in range(0, count.value):
-			result.append(exprs[i])
+		result = [exprs[i] for i in range(0, count.value)]
 		core.BNFreeILInstructionList(exprs)
 		return result
 
@@ -4778,9 +4751,7 @@ class HighLevelILFunction:
 		count = ctypes.c_ulonglong()
 		uses = core.BNGetHighLevelILUsesForLabel(self.handle, label_idx, count)
 		assert uses is not None, "core.BNGetHighLevelILUsesForLabel returned None"
-		result = []
-		for i in range(0, count.value):
-			result.append(HighLevelILInstruction.create(self, uses[i]))
+		result = [HighLevelILInstruction.create(self, uses[i]) for i in range(0, count.value)]
 		core.BNFreeILInstructionList(uses)
 		return result
 

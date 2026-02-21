@@ -138,15 +138,9 @@ class TypeParserResult:
 
 	@classmethod
 	def _from_core_struct(cls, struct: core.BNTypeParserResult) -> 'TypeParserResult':
-		types = []
-		variables = []
-		functions = []
-		for i in range(struct.typeCount):
-			types.append(ParsedType._from_core_struct(struct.types[i]))
-		for i in range(struct.variableCount):
-			variables.append(ParsedType._from_core_struct(struct.variables[i]))
-		for i in range(struct.functionCount):
-			functions.append(ParsedType._from_core_struct(struct.functions[i]))
+		types = [ParsedType._from_core_struct(struct.types[i]) for i in range(struct.typeCount)]
+		variables = [ParsedType._from_core_struct(struct.variables[i]) for i in range(struct.variableCount)]
+		functions = [ParsedType._from_core_struct(struct.functions[i]) for i in range(struct.functionCount)]
 		return TypeParserResult(types, variables, functions)
 
 	def _to_core_struct(self) -> core.BNTypeParserResult:
@@ -283,13 +277,9 @@ class TypeParser(metaclass=_TypeParserMetaclass):
 			if existingTypes:
 				existing_types_py = typecontainer.TypeContainer(handle=core.BNDuplicateTypeContainer(existingTypes))
 
-			options_py = []
-			for i in range(optionCount):
-				options_py.append(core.pyNativeStr(options[i]))
+			options_py = [core.pyNativeStr(options[i]) for i in range(optionCount)]
 
-			include_dirs_py = []
-			for i in range(includeDirCount):
-				include_dirs_py.append(core.pyNativeStr(includeDirs[i]))
+			include_dirs_py = [core.pyNativeStr(includeDirs[i]) for i in range(includeDirCount)]
 
 			(output_py, errors_py) = self.preprocess_source(
 				source_py, file_name_py, platform_py, existing_types_py, options_py,
@@ -327,13 +317,9 @@ class TypeParser(metaclass=_TypeParserMetaclass):
 			if existingTypes:
 				existing_types_py = typecontainer.TypeContainer(handle=core.BNDuplicateTypeContainer(existingTypes))
 
-			options_py = []
-			for i in range(optionCount):
-				options_py.append(core.pyNativeStr(options[i]))
+			options_py = [core.pyNativeStr(options[i]) for i in range(optionCount)]
 
-			include_dirs_py = []
-			for i in range(includeDirCount):
-				include_dirs_py.append(core.pyNativeStr(includeDirs[i]))
+			include_dirs_py = [core.pyNativeStr(includeDirs[i]) for i in range(includeDirCount)]
 
 			auto_type_source = core.pyNativeStr(autoTypeSource) or ""
 
@@ -554,9 +540,7 @@ class CoreTypeParser(TypeParser):
 		else:
 			output = None
 
-		errors = []
-		for i in range(error_count.value):
-			errors.append(TypeParserError._from_core_struct(errors_cpp[i]))
+		errors = [TypeParserError._from_core_struct(errors_cpp[i]) for i in range(error_count.value)]
 		core.BNFreeTypeParserErrors(errors_cpp, error_count.value)
 
 		return output, errors
@@ -606,9 +590,7 @@ class CoreTypeParser(TypeParser):
 			result = None
 		core.BNFreeTypeParserResult(result_cpp)
 
-		errors = []
-		for i in range(error_count.value):
-			errors.append(TypeParserError._from_core_struct(errors_cpp[i]))
+		errors = [TypeParserError._from_core_struct(errors_cpp[i]) for i in range(error_count.value)]
 		core.BNFreeTypeParserErrors(errors_cpp, error_count.value)
 
 		return result, errors
@@ -647,9 +629,7 @@ class CoreTypeParser(TypeParser):
 		else:
 			result = None
 
-		errors = []
-		for i in range(error_count.value):
-			errors.append(TypeParserError._from_core_struct(errors_cpp[i]))
+		errors = [TypeParserError._from_core_struct(errors_cpp[i]) for i in range(error_count.value)]
 		core.BNFreeTypeParserErrors(errors_cpp, error_count.value)
 
 		return result, errors
