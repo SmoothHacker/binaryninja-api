@@ -1,6 +1,5 @@
 import ctypes
-import inspect
-from typing import Generator, Optional, List, Tuple, Union, Mapping, Any, Dict, Iterator
+from typing import Optional, List, Iterator
 from dataclasses import dataclass
 
 from . import binaryview

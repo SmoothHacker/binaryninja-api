@@ -19,9 +19,8 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 import ctypes
-from typing import List, Optional, Dict, Callable
+from typing import List, Optional, Dict
 
-import binaryninja
 from . import _binaryninjacore as core
 from . import databuffer
 from . import filemetadata

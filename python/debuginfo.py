@@ -20,7 +20,6 @@
 
 import ctypes
 from typing import Optional, List, Iterator, Callable, Tuple, Any
-import traceback
 from dataclasses import dataclass, field
 
 # Binary Ninja components

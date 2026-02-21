@@ -22,11 +22,9 @@
 import struct
 import threading
 import queue
-import traceback
 import ctypes
 import abc
 import json
-import pprint
 import inspect
 import os
 import uuid
@@ -36,12 +34,11 @@ from dataclasses import dataclass
 from enum import IntFlag
 
 import collections
-from collections import defaultdict, OrderedDict, deque
+from collections import deque
 
 # Binary Ninja components
 import binaryninja
 from . import _binaryninjacore as core
-from . import decorators
 from .enums import (
     AnalysisState, SymbolType, Endianness, ModificationStatus, StringType, SegmentFlag, SectionSemantics, FindFlag,
     TypeClass, BinaryViewEventType, FunctionGraphType, TagReferenceType, TagTypeType, RegisterValueType, DisassemblyOption,
@@ -58,7 +55,6 @@ from . import basicblock
 from . import component
 from . import lineardisassembly
 from . import metadata
-from . import highlight
 from . import settings
 from . import variable
 from . import architecture

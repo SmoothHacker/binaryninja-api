@@ -18,18 +18,12 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
-import abc
 import ctypes
-from json import dumps
-import sys
-import traceback
 from typing import Any, Optional
-from urllib.parse import urlencode
 
 # Binary Ninja Components
 import binaryninja
 import binaryninja._binaryninjacore as core
-from . import settings
 from .log import log_error_for_exception
 
 

@@ -19,7 +19,6 @@
 # IN THE SOFTWARE.
 
 import ctypes
-import traceback
 import webbrowser
 from typing import Optional, Callable, List
 

@@ -18,25 +18,19 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
-import abc
 import ctypes
 import dataclasses
-from json import dumps
 from typing import List, Tuple, Optional, Dict, Any
 
-import sys
-import traceback
 
 # Binary Ninja Components
 import binaryninja
 import binaryninja._binaryninjacore as core
 
-from .settings import Settings
 from . import binaryview
 from . import platform
 from . import typecontainer
 from . import types
-from . import deprecation
 from .log import log_error_for_exception
 from .enums import TypeParserErrorSeverity, TypeParserOption
 

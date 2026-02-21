@@ -22,7 +22,6 @@ import argparse
 import cmd
 import ctypes
 import json
-import traceback
 from typing import List, Union, Callable, Optional, Any
 
 # Binary Ninja components

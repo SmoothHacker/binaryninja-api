@@ -21,7 +21,7 @@
 import ctypes
 import traceback
 from dataclasses import dataclass
-from typing import List, Optional, Union, Any
+from typing import List, Optional, Any
 
 # Binary Ninja components
 import binaryninja

@@ -18,8 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
-from typing import Optional, Union, Any
-from dataclasses import dataclass
+from typing import Optional, Any
 import ctypes
 
 import binaryninja

@@ -46,10 +46,7 @@ from . import flowgraph
 from . import callingconvention
 from . import workflow
 from . import languagerepresentation
-from . import deprecation
 from . import metadata
-from . import __version__
-from .commonil import Localcall
 
 # we define the following as such so the linter doesn't confuse 'highlight' the module with the
 # property of the same name. There is probably some other work around but it eludes me.
@@ -59,16 +56,12 @@ from . import platform as _platform
 # The following imports are for backward compatibility with API version < 3.0
 # so old plugins which do 'from binaryninja.function import RegisterInfo' will still work
 from .architecture import (
-    RegisterInfo, RegisterStackInfo, IntrinsicInput, IntrinsicInfo, InstructionBranch, InstructionInfo,
     InstructionTextToken
 )
 from .variable import (
-    Variable, LookupTableEntry, RegisterValue, ValueRange, PossibleValueSet, StackVariableReference, ConstantReference,
-    IndirectBranchInfo, ParameterVariables, AddressRange
+    Variable
 )
-from . import decorators
 from .enums import RegisterValueType
-from . import component
 
 ExpressionIndex = int
 InstructionIndex = int

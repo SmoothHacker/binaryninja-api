@@ -19,18 +19,13 @@
 # IN THE SOFTWARE.
 import abc
 import ctypes
-import dataclasses
-from json import dumps
-from typing import List, Sequence, Tuple, Optional, Any
+from typing import List, Tuple, Optional, Any, Sequence
 
-import sys
-import traceback
 
 # Binary Ninja Components
 import binaryninja
 import binaryninja._binaryninjacore as core
 
-from .settings import Settings
 from . import platform as _platform
 from . import types
 from . import function as _function

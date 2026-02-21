@@ -19,7 +19,6 @@
 # IN THE SOFTWARE.
 
 import ctypes
-import traceback
 from typing import List, Optional, Union, Any
 
 # Binary Ninja components

@@ -41,7 +41,6 @@ from . import highlight
 from . import flowgraph
 from . import variable
 from . import databuffer
-from . import stringrecognizer
 from . import types as _types
 from .interaction import show_graph_report
 from .commonil import (

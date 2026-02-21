@@ -18,7 +18,6 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
-import traceback
 import ctypes
 from typing import Generator, Union, List, Optional, Mapping, Tuple, NewType, Dict, Set, Any
 from dataclasses import dataclass, field

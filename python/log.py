@@ -18,7 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
-from typing import Optional, Union, Any
+from typing import Any
 
 # Binary Ninja components
 from . import _binaryninjacore as core

@@ -21,7 +21,6 @@
 import os
 import ctypes
 import traceback
-import warnings
 from typing import List, Dict, Optional, Tuple, Any
 
 # Binary Ninja components

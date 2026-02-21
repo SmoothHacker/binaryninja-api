@@ -38,7 +38,7 @@ from typing import Type as TypeHintType
 
 # Just windows things...
 if sys.platform == "win32":
-	from pydoc import help
+	pass
 
 # Binary Ninja components
 import binaryninja
@@ -915,9 +915,9 @@ from binaryninja import *
 		from binaryninja.settings import Settings
 		settings = Settings()
 		if settings.contains('corePlugins.view.sharedCache') and settings.get_bool('corePlugins.view.sharedCache'):
-			from .sharedcache import SharedCacheController
+			pass
 		if settings.contains('corePlugins.view.kernelCache') and settings.get_bool('corePlugins.view.kernelCache'):
-			from .kernelcache import KernelCacheController
+			pass
 		if os.environ.get('BN_STANDALONE_DEBUGGER'):
 			# By the time this scriptingprovider.py file is imported, the user plugins are not loaded yet.
 			# So `from debugger import DebuggerController` would not work.

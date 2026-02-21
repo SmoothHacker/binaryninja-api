@@ -20,7 +20,6 @@
 
 import ctypes
 from typing import Any, Optional, List, Dict, Union
-import uuid
 
 # Binary Ninja components
 import binaryninja

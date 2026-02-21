@@ -40,11 +40,9 @@ Notes:
 
 """
 
-import atexit
 import binaryninja
 import __main__
 import inspect
-import sys
 from typing import Optional
 
 __all__ = ["Completer"]

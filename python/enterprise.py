@@ -11,7 +11,6 @@ import binaryninja._binaryninjacore as core
 import binaryninja
 
 from . import decorators
-from . import deprecation
 
 if core.BNGetProduct() != "Binary Ninja Enterprise Client" and core.BNGetProduct() != "Binary Ninja Ultimate":
 	# None of these functions exist on other builds, so just raise here to notify anyone who tries to use this

@@ -19,7 +19,6 @@
 # IN THE SOFTWARE.
 
 import ctypes
-import traceback
 
 # Binary Ninja components
 import binaryninja

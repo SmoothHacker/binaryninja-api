@@ -20,7 +20,6 @@
 
 import ctypes
 import threading
-import traceback
 from typing import List, Optional, Tuple, Union
 
 # Binary Ninja components

@@ -23,7 +23,6 @@ from typing import Optional, List
 
 import binaryninja
 from . import _binaryninjacore as core
-from . import highlight
 from . import function as _function
 from . import basicblock
 from . import binaryview

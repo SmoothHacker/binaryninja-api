@@ -43,7 +43,7 @@ from .commonil import (
     BaseILInstruction, Constant, BinaryOperation, UnaryOperation, Comparison, SSA, Phi, FloatingPoint, ControlFlow,
     Terminal, Call, Localcall, Syscall, Tailcall, Return, Signed, Arithmetic, Carry, DoublePrecision, Memory, Load,
     Store, RegisterStack, SetVar, Intrinsic, VariableInstruction, SSAVariableInstruction, AliasedVariableInstruction,
-    ILSourceLocation, invalid_il_index
+    ILSourceLocation
 )
 
 TokenList = List['function.InstructionTextToken']

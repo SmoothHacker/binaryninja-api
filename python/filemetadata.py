@@ -18,7 +18,6 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 import contextlib
-import traceback
 import ctypes
 from typing import Any, Callable, Optional, List, Generator
 
@@ -30,7 +29,6 @@ from . import associateddatastore  #required for _FileMetadataAssociatedDataStor
 from .log import log_error_for_exception
 from . import binaryview
 from . import database
-from . import deprecation
 from . import project
 from . import undo
 

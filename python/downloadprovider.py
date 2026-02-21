@@ -22,7 +22,6 @@ import abc
 import ctypes
 from json import dumps
 import sys
-import traceback
 from typing import Any, Optional
 from urllib.parse import urlencode
 

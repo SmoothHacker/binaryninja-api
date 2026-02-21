@@ -18,11 +18,9 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
-import traceback
 import ctypes
 from typing import List, Optional
 
-import binaryninja
 from . import _binaryninjacore as core
 from . import filemetadata
 from . import binaryview

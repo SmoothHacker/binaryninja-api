@@ -19,16 +19,13 @@
 # IN THE SOFTWARE.
 
 import ctypes
-import traceback
 
 # Binary Ninja components
 import binaryninja
 from . import _binaryninjacore as core, LinearDisassemblyLine
 from .enums import LinearDisassemblyLineType, RenderLayerDefaultEnableState
-from . import binaryview
-from . import types
 from .log import log_error_for_exception
-from typing import Iterable, List, Optional, Union, Tuple, Any
+from typing import List, Optional, Any
 
 
 class _RenderLayerMetaclass(type):

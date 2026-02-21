@@ -20,8 +20,6 @@
 
 import abc
 import ctypes
-import sys
-import traceback
 from typing import Any, Optional
 
 # Binary Ninja Components

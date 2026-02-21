@@ -21,7 +21,7 @@
 import ctypes
 import struct
 from typing import Generator, List, Optional, Dict, Union, Tuple, NewType, ClassVar, Set, \
-	Callable, Any, Iterator, overload, Mapping
+	Callable, Any, Iterator, overload
 from dataclasses import dataclass
 
 # Binary Ninja components

@@ -19,8 +19,7 @@
 # IN THE SOFTWARE.
 
 import ctypes
-import traceback
-from typing import Any, Optional, List, Dict, Union, Tuple
+from typing import Any, Optional, List, Dict, Tuple
 
 # Binary Ninja components
 import binaryninja
@@ -30,8 +29,6 @@ from . import log
 from . import metadata
 from . import databuffer
 from . import platform
-from . import architecture
-from . import binaryview
 
 
 class TypeArchive:
