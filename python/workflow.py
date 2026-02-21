@@ -903,8 +903,7 @@ class Workflow(metaclass=_WorkflowMetaclass):
 		result = core.BNWorkflowGetEligibilitySettings(self.handle, ctypes.byref(length))
 		assert result is not None, "core.BNWorkflowGetEligibilitySettings returned None"
 		try:
-			out_list = [result[i].decode('utf-8') for i in range(range(length.value))]
-			return out_list
+			return [result[i].decode('utf-8') for i in range(range(length.value))]
 		finally:
 			core.BNFreeStringList(result, length.value)
 

@@ -5172,8 +5172,7 @@ class BinaryView:
 		data = (ctypes.c_float * ((length//block_size) + 1))()
 		length = core.BNGetEntropy(self.handle, addr, length, block_size, data)
 
-		result = [float(data[i]) for i in range(0, length)]
-		return result
+		return [float(data[i]) for i in range(0, length)]
 
 	def get_modification(self, addr: int, length: Optional[int] = None) -> List[ModificationStatus]:
 		"""
@@ -6872,10 +6871,9 @@ class BinaryView:
 				handle = core.BNNewSymbolReference(syms[i])
 				assert handle is not None, "core.BNNewSymbolReference returned None"
 				result.append(_types.CoreSymbol(handle))
-			result = sorted(
+			return sorted(
 			    filter(lambda sym: sym.type in ordered_filter, result), key=lambda sym: ordered_filter.index(sym.type)
 			)
-			return result
 		finally:
 			core.BNFreeSymbolList(syms, count.value)
 
@@ -7878,8 +7876,7 @@ class BinaryView:
 		count = ctypes.c_ulonglong(0)
 		bn_components = core.BNGetFunctionParentComponents(self.handle, function.handle, count)
 		try:
-			_components = [component.Component(core.BNNewComponentReference(bn_components[i])) for i in range(count.value)]
-			return _components
+			return [component.Component(core.BNNewComponentReference(bn_components[i])) for i in range(count.value)]
 		finally:
 			core.BNFreeComponents(bn_components, count.value)
 
@@ -7887,8 +7884,7 @@ class BinaryView:
 		count = ctypes.c_ulonglong(0)
 		bn_components = core.BNGetDataVariableParentComponents(self.handle, data_variable.address, count)
 		try:
-			_components = [component.Component(core.BNNewComponentReference(bn_components[i])) for i in range(count.value)]
-			return _components
+			return [component.Component(core.BNNewComponentReference(bn_components[i])) for i in range(count.value)]
 		finally:
 			core.BNFreeComponents(bn_components, count.value)
 
@@ -10449,8 +10445,7 @@ to a the type "tagRECT" found in the typelibrary "winX64common"
 		section = core.BNGetSectionByName(self.handle, name)
 		if section is None:
 			return None
-		result = Section(section)
-		return result
+		return Section(section)
 
 	def get_unique_section_names(self, name_list: List[str]) -> List[str]:
 		incoming_names = (ctypes.c_char_p * len(name_list))()

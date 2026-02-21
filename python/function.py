@@ -1276,11 +1276,10 @@ class Function:
 		addresses = core.BNGetUnresolvedIndirectBranches(self.handle, count)
 		try:
 			assert addresses is not None, "core.BNGetUnresolvedIndirectBranches returned None"
-			result = [(
+			return [(
 					architecture.CoreArchitecture._from_cache(addresses[i].arch),
 					addresses[i].address
 				) for i in range(count.value)]
-			return result
 		finally:
 			if addresses is not None:
 				core.BNFreeArchitectureAndAddressList(addresses)
@@ -1937,8 +1936,7 @@ class Function:
 			arch = self.arch
 		reg = arch.get_reg_index(reg)
 		value = core.BNGetRegisterValueAtInstruction(self.handle, arch.handle, addr, reg)
-		result = variable.RegisterValue.from_BNRegisterValue(value, arch)
-		return result
+		return variable.RegisterValue.from_BNRegisterValue(value, arch)
 
 	def get_reg_value_after(
 	    self, addr: int, reg: 'architecture.RegisterType', arch: Optional['architecture.Architecture'] = None
@@ -1959,8 +1957,7 @@ class Function:
 			arch = self.arch
 		reg = arch.get_reg_index(reg)
 		value = core.BNGetRegisterValueAfterInstruction(self.handle, arch.handle, addr, reg)
-		result = variable.RegisterValue.from_BNRegisterValue(value, arch)
-		return result
+		return variable.RegisterValue.from_BNRegisterValue(value, arch)
 
 	def get_stack_contents_at(
 	    self, addr: int, offset: int, size: int, arch: Optional['architecture.Architecture'] = None
@@ -1986,8 +1983,7 @@ class Function:
 		if arch is None:
 			arch = self.arch
 		value = core.BNGetStackContentsAtInstruction(self.handle, arch.handle, addr, offset, size)
-		result = variable.RegisterValue.from_BNRegisterValue(value, arch)
-		return result
+		return variable.RegisterValue.from_BNRegisterValue(value, arch)
 
 	def get_stack_contents_after(
 	    self, addr: int, offset: int, size: int, arch: Optional['architecture.Architecture'] = None
@@ -1995,8 +1991,7 @@ class Function:
 		if arch is None:
 			arch = self.arch
 		value = core.BNGetStackContentsAfterInstruction(self.handle, arch.handle, addr, offset, size)
-		result = variable.RegisterValue.from_BNRegisterValue(value, arch)
-		return result
+		return variable.RegisterValue.from_BNRegisterValue(value, arch)
 
 	def get_parameter_at(
 	    self, addr: int, func_type: Optional['types.Type'], i: int, arch: Optional['architecture.Architecture'] = None
@@ -2008,8 +2003,7 @@ class Function:
 		if func_type is not None:
 			_func_type = func_type.handle
 		value = core.BNGetParameterValueAtInstruction(self.handle, arch.handle, addr, _func_type, i)
-		result = variable.RegisterValue.from_BNRegisterValue(value, arch)
-		return result
+		return variable.RegisterValue.from_BNRegisterValue(value, arch)
 
 	def get_parameter_at_low_level_il_instruction(
 	    self, instr: 'lowlevelil.InstructionIndex', func_type: 'types.Type', i: int
@@ -2018,8 +2012,7 @@ class Function:
 		if func_type is not None:
 			_func_type = func_type.handle
 		value = core.BNGetParameterValueAtLowLevelILInstruction(self.handle, instr, _func_type, i)
-		result = variable.RegisterValue.from_BNRegisterValue(value, self.arch)
-		return result
+		return variable.RegisterValue.from_BNRegisterValue(value, self.arch)
 
 	def get_regs_read_by(self, addr: int,
 	                     arch: Optional['architecture.Architecture'] = None) -> List['architecture.RegisterName']:
@@ -2334,11 +2327,10 @@ class Function:
 		addresses = core.BNGetGuidedSourceBlocks(self.handle, count)
 		try:
 			assert addresses is not None, "core.BNGetGuidedSourceBlocks returned None"
-			result = [(
+			return [(
 					architecture.CoreArchitecture._from_cache(addresses[i].arch),
 					addresses[i].address
 				) for i in range(count.value)]
-			return result
 		finally:
 			if addresses is not None:
 				core.BNFreeArchitectureAndAddressList(addresses)
@@ -2362,12 +2354,11 @@ class Function:
 		branches = core.BNGetIndirectBranchesAt(self.handle, arch.handle, addr, count)
 		try:
 			assert branches is not None, "core.BNGetIndirectBranchesAt returned None"
-			result = [variable.IndirectBranchInfo(
+			return [variable.IndirectBranchInfo(
 				        architecture.CoreArchitecture._from_cache(branches[i].sourceArch), branches[i].sourceAddr,
 				        architecture.CoreArchitecture._from_cache(branches[i].destArch), branches[i].destAddr,
 				        branches[i].autoDefined
 				    ) for i in range(count.value)]
-			return result
 		finally:
 			core.BNFreeIndirectBranchList(branches)
 
@@ -2379,8 +2370,7 @@ class Function:
 		lines = core.BNGetFunctionBlockAnnotations(self.handle, arch.handle, addr, count)
 		try:
 			assert lines is not None, "core.BNGetFunctionBlockAnnotations returned None"
-			result = [InstructionTextToken._from_core_struct(lines[i].tokens, lines[i].count) for i in range(count.value)]
-			return result
+			return [InstructionTextToken._from_core_struct(lines[i].tokens, lines[i].count) for i in range(count.value)]
 		finally:
 			core.BNFreeInstructionTextLines(lines, count.value)
 
@@ -2562,8 +2552,7 @@ class Function:
 		"""
 		if arch is None:
 			arch = self.arch
-		type_id = core.BNGetIntegerConstantDisplayTypeEnumerationType(self.handle, arch.handle, instr_addr, value, operand)
-		return type_id
+		return core.BNGetIntegerConstantDisplayTypeEnumerationType(self.handle, arch.handle, instr_addr, value, operand)
 
 	def set_int_display_type(
 	    self, instr_addr: int, value: int, operand: int, display_type: IntegerDisplayType,
@@ -2996,8 +2985,7 @@ class Function:
 			arch = self.arch
 		reg_stack = arch.get_reg_stack_index(reg_stack)
 		adjust = core.BNGetCallRegisterStackAdjustmentForRegisterStack(self.handle, arch.handle, addr, reg_stack)
-		result = types.RegisterStackAdjustmentWithConfidence(adjust.adjustment, confidence=adjust.confidence)
-		return result
+		return types.RegisterStackAdjustmentWithConfidence(adjust.adjustment, confidence=adjust.confidence)
 
 	def is_call_instruction(self, addr: int, arch: Optional['architecture.Architecture'] = None) -> bool:
 		if arch is None:
@@ -3241,8 +3229,7 @@ class Function:
 		:return: List of Functions that call this function
 		:rtype: list(Function)
 		"""
-		functions = [ref.function for ref in self.caller_sites if ref.function is not None]
-		return functions
+		return [ref.function for ref in self.caller_sites if ref.function is not None]
 
 	@property
 	def caller_sites(self) -> Generator['binaryview.ReferenceSource', None, None]:

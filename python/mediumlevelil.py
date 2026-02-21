@@ -665,8 +665,7 @@ class MediumLevelILInstruction(BaseILInstruction):
 	def value(self) -> variable.RegisterValue:
 		"""Value of expression if constant or a known value (read-only)"""
 		value = core.BNGetMediumLevelILExprValue(self.function.handle, self.expr_index)
-		result = variable.RegisterValue.from_BNRegisterValue(value, self.function.arch)
-		return result
+		return variable.RegisterValue.from_BNRegisterValue(value, self.function.arch)
 
 	@property
 	def possible_values(self) -> variable.PossibleValueSet:
@@ -706,8 +705,7 @@ class MediumLevelILInstruction(BaseILInstruction):
 		exprs = self.function.get_low_level_il_expr_indexes(self.expr_index)
 		if self.function.low_level_il is None:
 			return []
-		result = [lowlevelil.LowLevelILInstruction.create(self.function.low_level_il.ssa_form, expr, None) for expr in exprs]
-		return result
+		return [lowlevelil.LowLevelILInstruction.create(self.function.low_level_il.ssa_form, expr, None) for expr in exprs]
 
 	@property
 	def high_level_il(self) -> Optional[highlevelil.HighLevelILInstruction]:
@@ -883,14 +881,12 @@ class MediumLevelILInstruction(BaseILInstruction):
 	def get_reg_value(self, reg: 'architecture.RegisterType') -> 'variable.RegisterValue':
 		reg = self.function.arch.get_reg_index(reg)
 		value = core.BNGetMediumLevelILRegisterValueAtInstruction(self.function.handle, reg, self.instr_index)
-		result = variable.RegisterValue.from_BNRegisterValue(value, self.function.arch)
-		return result
+		return variable.RegisterValue.from_BNRegisterValue(value, self.function.arch)
 
 	def get_reg_value_after(self, reg: 'architecture.RegisterType') -> 'variable.RegisterValue':
 		reg = self.function.arch.get_reg_index(reg)
 		value = core.BNGetMediumLevelILRegisterValueAfterInstruction(self.function.handle, reg, self.instr_index)
-		result = variable.RegisterValue.from_BNRegisterValue(value, self.function.arch)
-		return result
+		return variable.RegisterValue.from_BNRegisterValue(value, self.function.arch)
 
 	def get_possible_reg_values(
 	    self, reg: 'architecture.RegisterType', options: Optional[List[DataFlowQueryOption]] = None
@@ -919,14 +915,12 @@ class MediumLevelILInstruction(BaseILInstruction):
 	def get_flag_value(self, flag: 'architecture.FlagType') -> 'variable.RegisterValue':
 		flag = self.function.arch.get_flag_index(flag)
 		value = core.BNGetMediumLevelILFlagValueAtInstruction(self.function.handle, flag, self.instr_index)
-		result = variable.RegisterValue.from_BNRegisterValue(value, self.function.arch)
-		return result
+		return variable.RegisterValue.from_BNRegisterValue(value, self.function.arch)
 
 	def get_flag_value_after(self, flag: 'architecture.FlagType') -> 'variable.RegisterValue':
 		flag = self.function.arch.get_flag_index(flag)
 		value = core.BNGetMediumLevelILFlagValueAfterInstruction(self.function.handle, flag, self.instr_index)
-		result = variable.RegisterValue.from_BNRegisterValue(value, self.function.arch)
-		return result
+		return variable.RegisterValue.from_BNRegisterValue(value, self.function.arch)
 
 	def get_possible_flag_values(
 	    self, flag: 'architecture.FlagType', options: Optional[List[DataFlowQueryOption]] = None
@@ -954,15 +948,13 @@ class MediumLevelILInstruction(BaseILInstruction):
 
 	def get_stack_contents(self, offset: int, size: int) -> 'variable.RegisterValue':
 		value = core.BNGetMediumLevelILStackContentsAtInstruction(self.function.handle, offset, size, self.instr_index)
-		result = variable.RegisterValue.from_BNRegisterValue(value, self.function.arch)
-		return result
+		return variable.RegisterValue.from_BNRegisterValue(value, self.function.arch)
 
 	def get_stack_contents_after(self, offset: int, size: int) -> 'variable.RegisterValue':
 		value = core.BNGetMediumLevelILStackContentsAfterInstruction(
 		    self.function.handle, offset, size, self.instr_index
 		)
-		result = variable.RegisterValue.from_BNRegisterValue(value, self.function.arch)
-		return result
+		return variable.RegisterValue.from_BNRegisterValue(value, self.function.arch)
 
 	def get_possible_stack_contents(
 	    self, offset: int, size: int, options: Optional[List[DataFlowQueryOption]] = None
@@ -6057,8 +6049,7 @@ class MediumLevelILFunction:
 		instrs = core.BNGetMediumLevelILVariableUses(self.handle, var_data, count)
 		assert instrs is not None, "core.BNGetMediumLevelILVariableUses returned None"
 		try:
-			result = [self[instrs[i]] for i in range(0, count.value)]
-			return result
+			return [self[instrs[i]] for i in range(0, count.value)]
 		finally:
 			core.BNFreeILInstructionList(instrs)
 
@@ -6085,8 +6076,7 @@ class MediumLevelILFunction:
 	def get_ssa_var_value(self, ssa_var: SSAVariable) -> 'variable.RegisterValue':
 		var_data = ssa_var.var.to_BNVariable()
 		value = core.BNGetMediumLevelILSSAVarValue(self.handle, var_data, ssa_var.version)
-		result = variable.RegisterValue.from_BNRegisterValue(value, self._arch)
-		return result
+		return variable.RegisterValue.from_BNRegisterValue(value, self._arch)
 
 	def get_instruction_index_for_expr(self, expr: ExpressionIndex) -> Optional[InstructionIndex]:
 		result = core.BNGetMediumLevelILInstructionForExpr(self.handle, expr)
@@ -6234,10 +6224,9 @@ class MediumLevelILFunction:
 			core_variables = core.BNGetMediumLevelILAliasedVariables(self.handle, count)
 			assert core_variables is not None, "core.BNGetMediumLevelILAliasedVariables returned None"
 			try:
-				result = [variable.Variable(
+				return [variable.Variable(
 					        self, core_variables[var_i].type, core_variables[var_i].index, core_variables[var_i].storage
 					    ) for var_i in range(count.value)]
-				return result
 			finally:
 				core.BNFreeVariableList(core_variables)
 		return []

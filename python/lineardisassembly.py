@@ -641,8 +641,7 @@ class LinearViewCursor:
 	def _make_lines(lines, count: int, object) -> List['LinearDisassemblyLine']:
 		assert lines is not None, "core returned None for LinearDisassembly lines"
 		try:
-			result = [LinearDisassemblyLine._from_core_struct(lines[i], obj=object) for i in range(0, count)]
-			return result
+			return [LinearDisassemblyLine._from_core_struct(lines[i], obj=object) for i in range(0, count)]
 		finally:
 			core.BNFreeLinearDisassemblyLines(lines, count)
 
@@ -672,8 +671,7 @@ class LinearViewCursor:
 		assert layers is not None, "core.BNGetLinearViewCursorRenderLayers returned None"
 
 		try:
-			result = [binaryninja.RenderLayer(handle=layers[i]) for i in range(0, count.value)]
-			return result
+			return [binaryninja.RenderLayer(handle=layers[i]) for i in range(0, count.value)]
 		finally:
 			core.BNFreeRenderLayerList(layers)
 

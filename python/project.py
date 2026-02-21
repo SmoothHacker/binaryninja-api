@@ -672,8 +672,7 @@ class Project:
 		handle = core.BNProjectGetFolderById(self._handle, id)
 		if handle is None:
 			return None
-		folder = ProjectFolder(handle)
-		return folder
+		return ProjectFolder(handle)
 
 	def delete_folder(self, folder: ProjectFolder, progress_func: ProgressFuncType = _nop) -> bool:
 		"""
@@ -772,8 +771,7 @@ class Project:
 		handle = core.BNProjectGetFileById(self._handle, id)
 		if handle is None:
 			return None
-		file = ProjectFile(handle)
-		return file
+		return ProjectFile(handle)
 
 	def get_file_by_path_on_disk(self, path: str) -> Optional[ProjectFile]:
 		"""
@@ -785,8 +783,7 @@ class Project:
 		handle = core.BNProjectGetFileByPathOnDisk(self._handle, path)
 		if handle is None:
 			return None
-		file = ProjectFile(handle)
-		return file
+		return ProjectFile(handle)
 
 	def get_files_by_path_in_project(self, path: str) -> List[ProjectFile]:
 		"""

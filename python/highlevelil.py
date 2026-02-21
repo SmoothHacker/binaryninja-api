@@ -4649,10 +4649,9 @@ class HighLevelILFunction:
 			core_variables = core.BNGetHighLevelILVariables(self.handle, count)
 			assert core_variables is not None, "core.BNGetHighLevelILVariables returned None"
 			try:
-				result = [variable.Variable(
+				return [variable.Variable(
 					        self, core_variables[var_i].type, core_variables[var_i].index, core_variables[var_i].storage
 					    ) for var_i in range(count.value)]
-				return result
 			finally:
 				core.BNFreeVariableList(core_variables)
 		return []
@@ -4670,8 +4669,7 @@ class HighLevelILFunction:
 			core_variables = core.BNGetHighLevelILAliasedVariables(self.handle, count)
 			assert core_variables is not None, "core.BNGetHighLevelILAliasedVariables returned None"
 			try:
-				result = [variable.Variable(self, core_variables[var_i].type, core_variables[var_i].index, core_variables[var_i].storage) for var_i in range(count.value)]
-				return result
+				return [variable.Variable(self, core_variables[var_i].type, core_variables[var_i].index, core_variables[var_i].storage) for var_i in range(count.value)]
 			finally:
 				core.BNFreeVariableList(core_variables)
 		return []

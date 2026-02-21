@@ -881,8 +881,7 @@ class FlowGraph:
 		assert layers is not None, "core.BNGetFlowGraphRenderLayers returned None"
 
 		try:
-			result = [binaryninja.RenderLayer(handle=layers[i]) for i in range(0, count.value)]
-			return result
+			return [binaryninja.RenderLayer(handle=layers[i]) for i in range(0, count.value)]
 		finally:
 			core.BNFreeRenderLayerList(layers)
 

@@ -415,8 +415,7 @@ class FileMetadata:
 			'xor     eax, eax'
 			>>>
 		"""
-		id = core.BNBeginUndoActions(self.handle, anonymous_allowed)
-		return id
+		return core.BNBeginUndoActions(self.handle, anonymous_allowed)
 
 	def commit_undo_actions(self, id: Optional[str] = None) -> None:
 		"""

@@ -1058,8 +1058,7 @@ class PointerBuilder(TypeBuilder):
 		suffix = core.BNGetTypeBuilderPointerSuffix(self._handle, count)
 		assert suffix is not None, "core.BNGetTypeBuilderPointerSuffix returned None"
 		try:
-			result = [PointerSuffix(suffix[i]) for i in range(count.value)]
-			return result
+			return [PointerSuffix(suffix[i]) for i in range(count.value)]
 		finally:
 			core.BNFreePointerSuffixList(suffix, count)
 
@@ -1620,8 +1619,7 @@ class StructureBuilder(TypeBuilder):
 		count = ctypes.c_ulonglong()
 		bases = core.BNGetBaseStructuresForStructureBuilder(self.builder_handle, count)
 		try:
-			result = [BaseStructure._from_core_struct(bases[i], self.platform) for i in range(0, count.value)]
-			return result
+			return [BaseStructure._from_core_struct(bases[i], self.platform) for i in range(0, count.value)]
 		finally:
 			core.BNFreeBaseStructureList(bases, count.value)
 
@@ -2803,8 +2801,7 @@ class StructureType(Type):
 		count = ctypes.c_ulonglong()
 		bases = core.BNGetBaseStructuresForStructure(self.struct_handle, count)
 		try:
-			result = [BaseStructure._from_core_struct(bases[i], self.platform) for i in range(0, count.value)]
-			return result
+			return [BaseStructure._from_core_struct(bases[i], self.platform) for i in range(0, count.value)]
 		finally:
 			core.BNFreeBaseStructureList(bases, count.value)
 
@@ -3128,8 +3125,7 @@ class PointerType(Type):
 		suffix = core.BNGetTypePointerSuffix(self.handle, count)
 		assert suffix is not None, "core.BNGetTypePointerSuffix returned None"
 		try:
-			result = [suffix[i] for i in range(count.value)]
-			return result
+			return [suffix[i] for i in range(count.value)]
 		finally:
 			core.BNFreePointerSuffixList(suffix, count)
 

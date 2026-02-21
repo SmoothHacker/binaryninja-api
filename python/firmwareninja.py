@@ -487,13 +487,12 @@ class FirmwareNinja:
             raise RuntimeError("BNFirmwareNinjaQueryCustomDevices")
 
         try:
-            device_list = [FirmwareNinjaDevice(
+            return [FirmwareNinjaDevice(
                         name=devices[i].name,
                         start=devices[i].start,
                         size=devices[i].end - devices[i].start,
                         info=devices[i].info,
                     ) for i in range(count)]
-            return device_list
         finally:
             core.BNFirmwareNinjaFreeDevices(devices, count)
 
@@ -514,9 +513,8 @@ class FirmwareNinja:
             raise RuntimeError("BNFirmwareNinjaQueryBoardNamesForArchitecture")
 
         try:
-            board_list = [boards[i].decode("utf-8") for i in range(count)]
+            return [boards[i].decode("utf-8") for i in range(count)]
 
-            return board_list
         finally:
             core.BNFirmwareNinjaFreeBoardNames(boards, count)
 
@@ -541,13 +539,12 @@ class FirmwareNinja:
             raise RuntimeError("BNFirmwareNinjaQueryBoardDevices")
 
         try:
-            device_list = [FirmwareNinjaDevice(
+            return [FirmwareNinjaDevice(
                         name=devices[i].name,
                         start=devices[i].start,
                         size=devices[i].end - devices[i].start,
                         info=devices[i].info,
                     ) for i in range(count)]
-            return device_list
         finally:
             core.BNFirmwareNinjaFreeDevices(devices, count)
 
@@ -591,13 +588,12 @@ class FirmwareNinja:
             raise RuntimeError("BNFirmwareNinjaFindSectionsWithEntropy")
 
         try:
-            section_list = [FirmwareNinjaSection(
+            return [FirmwareNinjaSection(
                         type=FirmwareNinjaSectionType(sections[i].type),
                         start=sections[i].start,
                         size=sections[i].end - sections[i].start,
                         entropy=sections[i].entropy,
                     ) for i in range(count)]
-            return section_list
         finally:
             core.BNFirmwareNinjaFreeSections(sections, count)
 
@@ -628,10 +624,9 @@ class FirmwareNinja:
             raise RuntimeError("BNFirmwareNinjaGetFunctionMemoryAccesses")
 
         try:
-            fma_info_list = [FirmwareNinjaFunctionMemoryAccesses.from_BNFirmwareNinjaFunctionMemoryAccesses(
+            return [FirmwareNinjaFunctionMemoryAccesses.from_BNFirmwareNinjaFunctionMemoryAccesses(
                         fma_info[i].contents, self._view
                     ) for i in range(count)]
-            return fma_info_list
         finally:
             core.BNFirmwareNinjaFreeFunctionMemoryAccesses(fma_info, count)
 
@@ -682,11 +677,10 @@ class FirmwareNinja:
             return None
 
         try:
-            fma_info_list = [FirmwareNinjaFunctionMemoryAccesses.from_BNFirmwareNinjaFunctionMemoryAccesses(
+            return [FirmwareNinjaFunctionMemoryAccesses.from_BNFirmwareNinjaFunctionMemoryAccesses(
                         fma[i].contents, self._view
                     ) for i in range(count)]
 
-            return fma_info_list
         finally:
             core.BNFirmwareNinjaFreeFunctionMemoryAccesses(fma, count)
 
@@ -718,13 +712,12 @@ class FirmwareNinja:
             raise RuntimeError("BNFirmwareNinjaGetBoardDeviceAccesses")
 
         try:
-            device_accesses_list = [FirmwareNinjaDeviceAccesses(
+            return [FirmwareNinjaDeviceAccesses(
                                         board_name=device_accesses[i].name,
                                         total=device_accesses[i].total,
                                         unique=device_accesses[i].unique,
                                     ) for i in range(count)]
 
-            return device_accesses_list
         finally:
             core.BNFirmwareNinjaFreeBoardDeviceAccesses(device_accesses, count)
 

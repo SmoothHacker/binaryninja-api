@@ -663,8 +663,7 @@ class LowLevelILInstruction(BaseILInstruction):
 
 	@property
 	def mlils(self) -> List['mediumlevelil.MediumLevelILInstruction']:
-		result = [mediumlevelil.MediumLevelILInstruction.create(self.function.medium_level_il, expr) for expr in self.function.get_medium_level_il_expr_indexes(self.expr_index)]
-		return result
+		return [mediumlevelil.MediumLevelILInstruction.create(self.function.medium_level_il, expr) for expr in self.function.get_medium_level_il_expr_indexes(self.expr_index)]
 
 	@property
 	def mapped_medium_level_il(self) -> Optional['mediumlevelil.MediumLevelILInstruction']:
@@ -930,16 +929,14 @@ class LowLevelILInstruction(BaseILInstruction):
 			raise Exception("Can not call get_flag_value on function with Architecture set to None")
 		flag = self.function.arch.get_flag_index(flag)
 		value = core.BNGetLowLevelILFlagValueAtInstruction(self.function.handle, flag, self.instr_index)
-		result = variable.RegisterValue.from_BNRegisterValue(value, self.function.arch)
-		return result
+		return variable.RegisterValue.from_BNRegisterValue(value, self.function.arch)
 
 	def get_flag_value_after(self, flag: 'architecture.FlagType') -> 'variable.RegisterValue':
 		if self.function.arch is None:
 			raise Exception("Can not call get_flag_value_after on function with Architecture set to None")
 		flag = self.function.arch.get_flag_index(flag)
 		value = core.BNGetLowLevelILFlagValueAfterInstruction(self.function.handle, flag, self.instr_index)
-		result = variable.RegisterValue.from_BNRegisterValue(value, self.function.arch)
-		return result
+		return variable.RegisterValue.from_BNRegisterValue(value, self.function.arch)
 
 	def get_possible_flag_values(
 	    self, flag: 'architecture.FlagType', options: Optional[List[DataFlowQueryOption]] = None
@@ -971,13 +968,11 @@ class LowLevelILInstruction(BaseILInstruction):
 
 	def get_stack_contents(self, offset: int, size: int) -> 'variable.RegisterValue':
 		value = core.BNGetLowLevelILStackContentsAtInstruction(self.function.handle, offset, size, self.instr_index)
-		result = variable.RegisterValue.from_BNRegisterValue(value, self.function.arch)
-		return result
+		return variable.RegisterValue.from_BNRegisterValue(value, self.function.arch)
 
 	def get_stack_contents_after(self, offset: int, size: int) -> 'variable.RegisterValue':
 		value = core.BNGetLowLevelILStackContentsAfterInstruction(self.function.handle, offset, size, self.instr_index)
-		result = variable.RegisterValue.from_BNRegisterValue(value, self.function.arch)
-		return result
+		return variable.RegisterValue.from_BNRegisterValue(value, self.function.arch)
 
 	def get_possible_stack_contents(
 	    self, offset: int, size: int, options: Optional[List[DataFlowQueryOption]] = None
@@ -1112,8 +1107,7 @@ class LowLevelILInstruction(BaseILInstruction):
 		operand_list = core.BNLowLevelILGetOperandList(self.function.handle, self.expr_index, operand_index, count)
 		assert operand_list is not None, "core.BNLowLevelILGetOperandList returned None"
 		try:
-			result = [LowLevelILInstruction.create(self.function, operand_list[j], None) for j in range(count.value)]
-			return result
+			return [LowLevelILInstruction.create(self.function, operand_list[j], None) for j in range(count.value)]
 		finally:
 			core.BNLowLevelILFreeOperandList(operand_list)
 
@@ -3571,8 +3565,7 @@ class LowLevelILFunction:
 		registers = core.BNGetLowLevelRegisters(self.handle, count)
 		assert registers is not None, "core.BNGetLowLevelRegisters returned None"
 		try:
-			result = [ILRegister(self.arch, registers[var_i]) for var_i in range(count.value)]
-			return result
+			return [ILRegister(self.arch, registers[var_i]) for var_i in range(count.value)]
 		finally:
 			core.BNFreeLLILVariablesList(registers)
 
@@ -3599,8 +3592,7 @@ class LowLevelILFunction:
 		registerStacks = core.BNGetLowLevelRegisterStacks(self.handle, count)
 		assert registerStacks is not None, "core.BNGetLowLevelRegisterStacks returned None"
 		try:
-			result = [ILRegisterStack(self.arch, registerStacks[var_i]) for var_i in range(count.value)]
-			return result
+			return [ILRegisterStack(self.arch, registerStacks[var_i]) for var_i in range(count.value)]
 		finally:
 			core.BNFreeLLILVariablesList(registerStacks)
 
@@ -3615,8 +3607,7 @@ class LowLevelILFunction:
 		flags = core.BNGetLowLevelFlags(self.handle, count)
 		assert flags is not None, "core.BNGetLowLevelFlags returned None"
 		try:
-			result = [ILFlag(self.arch, flags[var_i]) for var_i in range(count.value)]
-			return result
+			return [ILFlag(self.arch, flags[var_i]) for var_i in range(count.value)]
 		finally:
 			core.BNFreeLLILVariablesList(flags)
 
@@ -3737,8 +3728,7 @@ class LowLevelILFunction:
 		memory_versions = core.BNGetLowLevelMemoryVersions(self.handle, count)
 		assert memory_versions is not None, "core.BNGetLowLevelMemoryVersions returned None"
 		try:
-			result = [memory_versions[version_i] for version_i in range(count.value)]
-			return result
+			return [memory_versions[version_i] for version_i in range(count.value)]
 		finally:
 			core.BNFreeLLILVariableVersionList(memory_versions)
 
@@ -3794,8 +3784,7 @@ class LowLevelILFunction:
 		instrs = core.BNLowLevelILGetInstructionsAt(self.handle, arch.handle, addr, count)
 		assert instrs is not None, "core.BNLowLevelILGetInstructionsAt returned None"
 		try:
-			result = [instrs[i] for i in range(0, count.value)]
-			return result
+			return [instrs[i] for i in range(0, count.value)]
 		finally:
 			core.BNFreeILInstructionList(instrs)
 
@@ -3804,8 +3793,7 @@ class LowLevelILFunction:
 		exits = core.BNLowLevelILGetExitsForInstruction(self.handle, idx, count)
 		assert exits is not None, "core.BNLowLevelILGetExitsForInstruction returned None"
 		try:
-			result = [exits[i] for i in range(0, count.value)]
-			return result
+			return [exits[i] for i in range(0, count.value)]
 		finally:
 			core.BNFreeILInstructionList(exits)
 
@@ -6232,14 +6220,12 @@ class LowLevelILFunction:
 	def get_ssa_reg_value(self, reg_ssa: SSARegister) -> 'variable.RegisterValue':
 		reg = self.arch.get_reg_index(reg_ssa.reg)
 		value = core.BNGetLowLevelILSSARegisterValue(self.handle, reg, reg_ssa.version)
-		result = variable.RegisterValue.from_BNRegisterValue(value, self._arch)
-		return result
+		return variable.RegisterValue.from_BNRegisterValue(value, self._arch)
 
 	def get_ssa_flag_value(self, flag_ssa: SSAFlag) -> 'variable.RegisterValue':
 		flag = self.arch.get_flag_index(flag_ssa.flag)
 		value = core.BNGetLowLevelILSSAFlagValue(self.handle, flag, flag_ssa.version)
-		result = variable.RegisterValue.from_BNRegisterValue(value, self._arch)
-		return result
+		return variable.RegisterValue.from_BNRegisterValue(value, self._arch)
 
 	def get_instruction_index_for_expr(self, expr: ExpressionIndex) -> Optional[InstructionIndex]:
 		result = core.BNGetLowLevelILInstructionForExpr(self.handle, expr)
