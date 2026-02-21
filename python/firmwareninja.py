@@ -312,7 +312,6 @@ class FirmwareNinjaReferenceNode:
             return []
 
         count = ctypes.c_ulonglong(0)
-        nodes = []
         try:
             bn_nodes = core.BNFirmwareNinjaReferenceNodeGetChildren(self._handle, count)
             return [FirmwareNinjaReferenceNode(core.BNNewFirmwareNinjaReferenceNodeReference(bn_nodes[i]), self._view) for i in range(count.value)]

@@ -1068,7 +1068,6 @@ class MediumLevelILInstruction(BaseILInstruction):
 		count = ctypes.c_ulonglong()
 		operand_list = core.BNMediumLevelILGetOperandList(self.function.handle, self.expr_index, operand_index, count)
 		assert operand_list is not None, "core.BNMediumLevelILGetOperandList returned None"
-		value: List[int] = []
 		try:
 			return [operand_list[j] for j in range(count.value)]
 		finally:
@@ -1083,7 +1082,6 @@ class MediumLevelILInstruction(BaseILInstruction):
 		count = ctypes.c_ulonglong()
 		operand_list = core.BNMediumLevelILGetOperandList(self.function.handle, self.expr_index, operand_index1, count)
 		assert operand_list is not None, "core.BNMediumLevelILGetOperandList returned None"
-		value: List[variable.Variable] = []
 		try:
 			return [variable.Variable.from_identifier(self.function, operand_list[j]) for j in range(count.value)]
 		finally:
@@ -1107,7 +1105,6 @@ class MediumLevelILInstruction(BaseILInstruction):
 		count = ctypes.c_ulonglong()
 		operand_list = core.BNMediumLevelILGetOperandList(self.function.handle, self.expr_index, operand_index1, count)
 		assert operand_list is not None, "core.BNMediumLevelILGetOperandList returned None"
-		value: List['MediumLevelILInstruction'] = []
 		try:
 			return [MediumLevelILInstruction.create(self.function, operand_list[j], None) for j in range(count.value)]
 		finally:

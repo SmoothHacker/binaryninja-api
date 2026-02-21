@@ -3884,7 +3884,6 @@ class BinaryView:
 		count = ctypes.c_ulonglong(0)
 		nameSpaceList = core.BNGetNameSpaces(self.handle, count)
 		assert nameSpaceList is not None, "core.BNGetNameSpaces returned None"
-		result = []
 		try:
 			return [_types.NameSpace._from_core_struct(nameSpaceList[i]) for i in range(count.value)]
 		finally:
@@ -10669,7 +10668,6 @@ to a the type "tagRECT" found in the typelibrary "winX64common"
 		:return: list of :py:class:`BinaryViewType` names
 		:rtype: list(str)
 		"""
-		result = []
 		count = ctypes.c_ulonglong(0)
 		names = core.BNBinaryViewGetLoadSettingsTypeNames(self.handle, count)
 		assert names is not None, "core.BNBinaryViewGetLoadSettingsTypeNames returned None"

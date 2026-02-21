@@ -134,7 +134,6 @@ class Completer:
 		import keyword
 		matches = []
 		seen = {"__builtins__"}
-		n = len(text)
 		for word in keyword.kwlist:
 			score = fuzzy_match(word, text)
 			if score is not None:

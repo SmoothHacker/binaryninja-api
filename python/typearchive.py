@@ -450,7 +450,6 @@ class TypeArchive:
 		if snapshot is None:
 			snapshot = self.current_snapshot_id
 		count = ctypes.c_ulonglong(0)
-		result = []
 		names = core.BNGetTypeArchiveTypeNames(self.handle, snapshot, count)
 		assert names is not None, "core.BNGetTypeArchiveTypeNames returned None"
 		try:

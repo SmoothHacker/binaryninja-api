@@ -725,7 +725,6 @@ class HighLevelILInstruction(BaseILInstruction):
 		count = ctypes.c_ulonglong()
 		operand_list = core.BNHighLevelILGetOperandList(self.function.handle, self.expr_index, operand_index, count)
 		assert operand_list is not None, "core.BNHighLevelILGetOperandList returned None"
-		value: List[int] = []
 		try:
 			return [operand_list[j] for j in range(count.value)]
 		finally:
@@ -735,7 +734,6 @@ class HighLevelILInstruction(BaseILInstruction):
 		count = ctypes.c_ulonglong()
 		operand_list = core.BNHighLevelILGetOperandList(self.function.handle, self.expr_index, operand_index1, count)
 		assert operand_list is not None, "core.BNHighLevelILGetOperandList returned None"
-		value: List[HighLevelILInstruction] = []
 		try:
 			return [HighLevelILInstruction.create(self.function, operand_list[j], self.as_ast) for j in range(count.value)]
 		finally:

@@ -114,7 +114,6 @@ class Extension:
 	@property
 	def api(self) -> List[str]:
 		"""String indicating the API used by the plugin"""
-		result: List[str] = []
 		count = ctypes.c_ulonglong(0)
 		platforms = core.BNPluginGetApis(self.handle, count)
 		assert platforms is not None, "core.BNPluginGetApis returned None"
@@ -168,7 +167,6 @@ class Extension:
 	@property
 	def plugin_types(self) -> List[PluginType]:
 		"""List of PluginType enumeration objects indicating the plugin type(s)"""
-		result = []
 		count = ctypes.c_ulonglong(0)
 		plugintypes = core.BNPluginGetPluginTypes(self.handle, count)
 		assert plugintypes is not None, "core.BNPluginGetPluginTypes returned None"
@@ -214,7 +212,6 @@ class Extension:
 	@property
 	def install_platforms(self) -> List[str]:
 		"""List of platforms this plugin can execute on"""
-		result = []
 		count = ctypes.c_ulonglong(0)
 		platforms = core.BNPluginGetPlatforms(self.handle, count)
 		assert platforms is not None, "core.BNPluginGetPlatforms returned None"

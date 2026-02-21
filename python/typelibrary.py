@@ -178,7 +178,6 @@ class TypeLibrary:
 		A list of extra names that will be considered a match by ``Platform.get_type_libraries_by_name``
 		"""
 		count = ctypes.c_ulonglong(0)
-		result:List[str] = []
 		names = core.BNGetTypeLibraryAlternateNames(self.handle, count)
 		assert names is not None, "core.BNGetTypeLibraryAlternateNames returned None"
 		try:
@@ -202,7 +201,6 @@ class TypeLibrary:
 		Platforms that may not be present.
 		"""
 		count = ctypes.c_ulonglong(0)
-		result = []
 		platforms = core.BNGetTypeLibraryPlatforms(self.handle, count)
 		assert platforms is not None, "core.BNGetTypeLibraryPlatforms returned None"
 		try:
